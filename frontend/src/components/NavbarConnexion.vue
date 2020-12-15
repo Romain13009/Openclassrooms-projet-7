@@ -6,10 +6,10 @@
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">S'identifier</a>
+                    <router-link class="nav-link" to="/login">S'identifier</router-link>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-info" href="#">S'inscrire</a>
+                    <router-link class="nav-link text-info" to="/signup">S'inscrire</router-link>
                 </li>
             </ul>
         </div>
