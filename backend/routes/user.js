@@ -2,9 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const userCtrl = require('../controllers/user');
+const auth = require('../middleware/auth');
 
 //Routes post car le frontend va envoyer des informations (email, password)
 router.post('/users/signup/', userCtrl.signup);
 router.post('/users/login/', userCtrl.login);
+router.get('/users/profile/', auth, userCtrl.getUserProfile);
 
 module.exports = router;
