@@ -109,6 +109,7 @@ exports.login = (req, res, next) => {
 
 //RECUPERER LE PROFIL
 exports.getUserProfile = (req, res, next) => {
+    //Paramètres
     const token = req.headers.authorization.split(' ')[1]; //On récupère le token (on split autour de l'espace), on récupère un tableau dont on prend le second élément (le 1)
     const decodedToken = jwt.verify(token, JWT_CLE_SECRETE); //On décode le token, on utilise la clé secrete, le token décodé devient un objet js
     const userId = decodedToken.userId; //On récupère l'id de la réponse
