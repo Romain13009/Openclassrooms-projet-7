@@ -1,6 +1,10 @@
 //Imports
 const models = require('../models');
+const jwt = require('jsonwebtoken');
 const fs = require('fs');
+
+const JWT_CLE_SECRETE = '1azenh44e2r5v8b7n4h5t65dvvvtyu5i1f6cc7cn';
+
 
 //Controllers ##############################################################################################################
 
@@ -8,6 +12,7 @@ const fs = require('fs');
 exports.createPost = (req, res, next) => {
     //paramètres
     var content = req.body.content;
+    var image;
 
     const token = req.headers.authorization.split(' ')[1]; //On récupère le token (on split autour de l'espace), on récupère un tableau dont on prend le second élément (le 1)
     const decodedToken = jwt.verify(token, JWT_CLE_SECRETE); //On décode le token, on utilise la clé secrete, le token décodé devient un objet js
@@ -29,21 +34,21 @@ exports.createPost = (req, res, next) => {
     })
         .then((userFound) => {
             if (userFound != null) {
-    
+         
                 if (req.file != undefined) {
                 image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
                 } else { image == null }
-
+               
                 const newPost = new models.Post({
-                    idUSERS: userFound.id,
+                    UserId: userFound.id,
                     content: content,
                     image: image,
                     likes: 0
                 });
                 newPost.save()
                     .then(() => res.status(201).json(newPost))
-                    .catch(function(){
-                        return res.status(401).json(newPost);
+                    .catch(function(error){
+                        return res.status(500).json(error);
                     })
 
             } else {
@@ -60,13 +65,13 @@ exports.createPost = (req, res, next) => {
 exports.showPost = (req, res, next) => {
     models.Post.findAll({
         order: [['CreatedAt', 'DESC']],
-        include: [{ //Relation avec l'autre table pour afficher des éléments
+        include: [{
             model: models.User,
-            attributes: ['username']
+            attributes: [ 'username']
         }]
     })
         .then(function(posts) {
-            if (posts.lenght > null) {
+            if (posts.length > null) {
                 res.status(201).json(posts)
             } else {
                 return res.status(404).json({ error: 'Aucune publication' });
