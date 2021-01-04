@@ -9,5 +9,6 @@ const multer = require('../middleware/multer-config');
 router.post('/new/', auth, multer, postCtrl.createPost);
 router.get('/', auth, multer, postCtrl.showPost);
 router.delete('/delete', auth, postCtrl.deletePost);
+router.put('/update', auth, postCtrl.updatePost)
 
 module.exports = router;
