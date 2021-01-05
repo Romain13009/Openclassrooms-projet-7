@@ -2,8 +2,6 @@
 const models = require('../models');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
-const post = require('../models/post');
-const User = require('../models/User');
 
 
 const JWT_CLE_SECRETE = '1azenh44e2r5v8b7n4h5t65dvvvtyu5i1f6cc7cn';
@@ -212,7 +210,7 @@ exports.likePost = (req, res, next) => {
             return res.status(400).json({ 'error': 'postId invalide'})
         }
 
-        models.Post.finOne({
+        models.Post.findOne({
             where: { id: postId}
         })
             .then(function(postFound){ //On cherche le post
@@ -242,7 +240,7 @@ exports.likePost = (req, res, next) => {
                                 return res.status(500).json({ error: 'erreur' });
                             })
                         } else {
-                            return res.status(400).json({ error: 'Vous avez déjà liker cette publication' });
+                            return res.status(400).json({ error: 'Vous avez déjà liké cette publication' });
                         }
                     })
                     .catch(function(){
@@ -272,15 +270,15 @@ exports.dislikePost = (req, res, next) => {
         return res.status(400).json({ 'error': 'postId invalide'})
     }
 
-    models.Post.finOne({
+    models.Post.findOne({ //On cherche le post
         where: { id: postId}
     })
-        .then(function(postFound){ //On cherche le post
-            models.User.findOne({
+        .then(function(postFound){ 
+            models.User.findOne({//On cherche l'utilisateur
                 where: {id: userId}
             })
-            .then(function(userFound){
-                models.Like.findOne({ //On cherche l'utilisateur
+            .then(function(){
+                models.Like.findOne({ 
                     where: {
                         userId: userId,
                         postId: postId
@@ -302,7 +300,7 @@ exports.dislikePost = (req, res, next) => {
                             return res.status(500).json({ error: 'erreur' });
                         })
                     } else {
-                        return res.status(400).json({ error: 'Vous avez déjà liker cette publication' });
+                        return res.status(400).json({ error: 'Vous avez déjà disliké cette publication' });
                     }
                 })
                 .catch(function(){

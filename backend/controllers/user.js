@@ -149,3 +149,47 @@ exports.modifyUserProfile = (req, res, next) => {
             return res.status(404).json({ error: 'Utilisateur introuvable' });
         })
 };
+
+
+//SUPPRESSION
+exports.deleteUserProfile = (req, res, next) => {
+    //Paramètres
+    const token = req.headers.authorization.split(' ')[1]; //On récupère le token (on split autour de l'espace), on récupère un tableau dont on prend le second élément (le 1)
+    const decodedToken = jwt.verify(token, JWT_CLE_SECRETE); //On décode le token, on utilise la clé secrete, le token décodé devient un objet js
+    const userId = decodedToken.userId; //On récupère l'id de la réponse
+
+    models.User.findOne({
+        where: { id: userId }
+    })  
+        .then((userFound) => {
+            if(userFound != null) {
+                models.Like.destroy({
+                    where: { userId: userFound.id }
+                })
+                    .then(() => {
+                        console.log(1)
+                        models.Post.destroy({
+                            where: { userId: userFound.id }
+                        })
+                        models.User.destroy({
+                            where: { id: userId }
+                        })
+                        console.log(2)
+                            
+                        console.log(4)
+                        .then(() => res.status(200).json({ message: 'Utilisateur et publications supprimés' }))
+                        .catch(function(){
+                            return res.status(404).json({ error: 'Problème lors de la suppression de l utilisateur' });
+                        })      
+                    })
+                    .catch(function(){
+                        return res.status(404).json({ error: 'Destruction dans la table Likes impossible' });
+                })
+            }else {
+                    return res.status(404).json({ error: 'Utilisateur introuvable' });
+            }
+        })
+        .catch(function(){
+            return res.status(404).json({ error: 'Utilisateur introuvable' });
+        })
+};

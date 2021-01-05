@@ -9,5 +9,6 @@ router.post('/users/signup/', userCtrl.signup);
 router.post('/users/login/', userCtrl.login);
 router.get('/users/profile/', auth, userCtrl.getUserProfile);
 router.put('/users/profile/', auth, userCtrl.modifyUserProfile);
+router.delete('/users/delete/', auth, userCtrl.deleteUserProfile);
 
 module.exports = router;
