@@ -2,7 +2,9 @@
 const models = require('../models');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
-const { post } = require('../app');
+const post = require('../models/post');
+const User = require('../models/User');
+
 
 const JWT_CLE_SECRETE = '1azenh44e2r5v8b7n4h5t65dvvvtyu5i1f6cc7cn';
 
@@ -65,11 +67,14 @@ exports.createPost = (req, res, next) => {
 
 //AFFICHER LES POSTS
 exports.showPost = (req, res, next) => {
+    var fields = req.query.fields;
+
     models.Post.findAll({
+        attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
         order: [['CreatedAt', 'DESC']],
         include: [{
             model: models.User,
-            attributes: [ 'username']
+            attributes : ['username']
         }],
         limit: 10
     })
@@ -190,5 +195,125 @@ exports.updatePost = (req, res, next) => {
         }) 
         .catch(function(){
             return res.status(404).json({ error: 'Publication introuvable' });
+        })
+}
+
+
+//LIKER UN POST
+exports.likePost = (req, res, next) => {
+        //Paramètres
+        var postId = parseInt(req.params.postId)
+
+        const token = req.headers.authorization.split(' ')[1]; //On récupère le token (on split autour de l'espace), on récupère un tableau dont on prend le second élément (le 1)
+        const decodedToken = jwt.verify(token, JWT_CLE_SECRETE); //On décode le token, on utilise la clé secrete, le token décodé devient un objet js
+        const userId = decodedToken.userId; //On récupère l'id de la réponse
+
+        if (postId <= 0) {
+            return res.status(400).json({ 'error': 'postId invalide'})
+        }
+
+        models.Post.finOne({
+            where: { id: postId}
+        })
+            .then(function(postFound){ //On cherche le post
+                models.User.findOne({
+                    where: {id: userId}
+                })
+                .then(function(userFound){
+                    models.Like.findOne({ //On cherche l'utilisateur
+                        where: {
+                            userId: userId,
+                            postId: postId
+                        }
+                    })
+                    .then(function(userLiked){ //On cherche leurs correspondances dans la table like
+                        if(!userLiked) {
+                            postFound.addUser(userFound)
+                            .then(function(){
+                                postFound.update({
+                                    likes: postFound.likes + 1,
+                                })
+                                .then(()=> res.status(201).json(postFound))
+                                .catch(function(){
+                                    return res.status(500).json({ error: 'ajout du like impossible' });
+                                })
+                            })
+                            .catch(function(){
+                                return res.status(500).json({ error: 'erreur' });
+                            })
+                        } else {
+                            return res.status(400).json({ error: 'Vous avez déjà liker cette publication' });
+                        }
+                    })
+                    .catch(function(){
+                        return res.status(400).json({ error: 'Erreur de vérification' });
+                    })
+                })
+                .catch(function(){
+                    return res.status(404).json({ error: 'Utilisateur introuvable' });
+                })
+            })
+            .catch(function(){
+                return res.status(404).json({ error: 'Publication introuvable ou inéxistante' });
+            })
+}
+
+
+//DISLIKER UN POST
+exports.dislikePost = (req, res, next) => {
+    //Paramètres
+    var postId = parseInt(req.params.postId)
+
+    const token = req.headers.authorization.split(' ')[1]; //On récupère le token (on split autour de l'espace), on récupère un tableau dont on prend le second élément (le 1)
+    const decodedToken = jwt.verify(token, JWT_CLE_SECRETE); //On décode le token, on utilise la clé secrete, le token décodé devient un objet js
+    const userId = decodedToken.userId; //On récupère l'id de la réponse
+
+    if (postId <= 0) {
+        return res.status(400).json({ 'error': 'postId invalide'})
+    }
+
+    models.Post.finOne({
+        where: { id: postId}
+    })
+        .then(function(postFound){ //On cherche le post
+            models.User.findOne({
+                where: {id: userId}
+            })
+            .then(function(userFound){
+                models.Like.findOne({ //On cherche l'utilisateur
+                    where: {
+                        userId: userId,
+                        postId: postId
+                    }
+                })
+                .then(function(userLiked){ //On cherche leurs correspondances dans la table like
+                    if(userLiked) {
+                        userLiked.destroy()
+                        .then(function(){
+                            postFound.update({
+                                likes: postFound.likes - 1,
+                            })
+                            .then(()=> res.status(201).json(postFound))
+                            .catch(function(){
+                                return res.status(500).json({ error: 'ajout du dislike impossible' });
+                            })
+                        })
+                        .catch(function(){
+                            return res.status(500).json({ error: 'erreur' });
+                        })
+                    } else {
+                        return res.status(400).json({ error: 'Vous avez déjà liker cette publication' });
+                    }
+                })
+                .catch(function(){
+                    return res.status(400).json({ error: 'Erreur de vérification' });
+                })
+            })
+            .catch(function(){
+                return res.status(404).json({ error: 'Utilisateur introuvable' });
+            })
+        })
+        .catch(function(){
+            return res.status(404).json({ error: 'Publication introuvable ou inéxistante' });
         })
 }

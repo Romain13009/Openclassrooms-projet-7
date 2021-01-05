@@ -20,6 +20,8 @@ app.use((req, res, next) => {
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
 
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 //app.use(helmet());
 
 app.use('/api/auth', userRoutes); //pour la routes auth on utilise le router userRoutes
