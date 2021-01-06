@@ -6,7 +6,7 @@
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <router-link class="nav-link" to="/login">S'identifier</router-link>
+                    <router-link class="nav-link" to="/">S'identifier</router-link>
                 </li>
                 <li class="nav-item">
                     <router-link class="nav-link text-info" to="/signup">S'inscrire</router-link>
