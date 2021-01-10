@@ -51,7 +51,7 @@ exports.signup = (req, res, next) => {
                             isAdmin: 0
                         });
                         newUser.save() //cette méthode enregistre dans la bdd
-                            .then(() => res.status(201).json({ message: 'Utilisateur créé.'}))
+                            .then(() => res.status(201).json({ message: 'Utilisateur créé.'}))                 
                             .catch(error => res.status(400).json({ error }));
                     })
                     .catch(error => res.status(500).json({ error }));
@@ -90,7 +90,7 @@ exports.login = (req, res, next) => {
                             userId: userFound.id,
                             token: jwt.sign({ //fonction sign pour encoder
                                 userId: userFound.id,
-                                isAdmin: userFound.isAdmin},//1er argument: ce qque l'on veut encoder
+                                isAdmin: userFound.isAdmin},//1er argument: ce que l'on veut encoder
                                 JWT_CLE_SECRETE, //2ème argument: clé secrète
                                 { expiresIn: '8h' } //3ème argument: argument de configuration
                             )
@@ -115,7 +115,7 @@ exports.getUserProfile = (req, res, next) => {
     const userId = decodedToken.userId; //On récupère l'id de la réponse
 
     models.User.findOne({
-        attributes: ['id','email', 'username', 'description'],
+        attributes: ['id','email', 'username', 'description', 'isAdmin'],
         where: { id: userId }
     })
         .then(user => res.status(201).json(user))
@@ -174,9 +174,6 @@ exports.deleteUserProfile = (req, res, next) => {
                         models.User.destroy({
                             where: { id: userId }
                         })
-                        console.log(2)
-                            
-                        console.log(4)
                         .then(() => res.status(200).json({ message: 'Utilisateur et publications supprimés' }))
                         .catch(function(){
                             return res.status(404).json({ error: 'Problème lors de la suppression de l utilisateur' });
