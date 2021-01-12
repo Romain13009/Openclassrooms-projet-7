@@ -25,7 +25,7 @@ export default {
     data() {
         return {
             dataLogin: {
-                username: "",
+                email: "",
                 password: ""
             }
         }
@@ -36,11 +36,15 @@ export default {
     methods: {
         loginSend() {
             if (this.dataLogin.email !== null && this.dataLogin.password !== null){
+                localStorage.removeItem('token')
                 axios.post("http://localhost:3000/api/auth/users/login", this.dataLogin)
                     .then(response => {
                         console.log(response);
                         localStorage.setItem('token', response.data.token)
+                        window.location="/wall"
                     })
+            } else {
+                alert('Email ou mot de passe incorrects')
             }
         }
     }

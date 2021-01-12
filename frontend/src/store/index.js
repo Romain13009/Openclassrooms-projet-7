@@ -28,12 +28,13 @@ export default createStore({
         headers: {
           Authorization: "Bearer " + localStorage.getItem('token')
         }
-          .then(response => {
-            console.log(response);
-            context.commit("saveDataUser", [response.data.id, response.data.email, response.data.username, response.data.description, response.data.isAdmin])
-          })
-          .catch(error => console.log(error))
       })
+        .then(response => {
+          console.log(response);
+          context.commit("saveDataUser", [response.data.id, response.data.email, response.data.username, response.data.description, response.data.isAdmin])
+        })
+        .catch(error => console.log(error))
+      
     }
   },
   modules: {

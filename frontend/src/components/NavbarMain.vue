@@ -6,13 +6,13 @@
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <router-link class="nav-link" to="/">Wall</router-link>
+                    <router-link class="nav-link text-info" to="/">Wall</router-link>
                 </li>
                 <li class="nav-item active">
-                    <router-link class="nav-link" to="/">Mon compte</router-link>
+                    <router-link class="nav-link text-info" to="/">Mon compte</router-link>
                 </li>
                 <li class="nav-item">
-                    <router-link class="nav-link text-danger" to="/signup">Deconnexion</router-link>
+                    <router-link class="nav-link text-danger" to="/">Deconnexion</router-link>
                 </li>
             </ul>
         </div>
@@ -27,6 +27,10 @@ export default {
 
 <style scoped>
 .navbar {
+    position: fixed;
+    z-index: 1;
     min-height: 80px;
+    width: 100vw;
+    margin-top: -6rem;
 }
 </style>

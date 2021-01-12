@@ -44,7 +44,8 @@ exports.createPost = (req, res, next) => {
                     UserId: userFound.id,
                     content: content,
                     image: image,
-                    likes: 0
+                    likes: 0,
+                    username: userFound.username
                 });
                 newPost.save()
                     .then(() => res.status(201).json(newPost))
