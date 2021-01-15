@@ -1,9 +1,8 @@
 <template>
     <div>
         <NavbarMain />
-        <!--<Post v-for="post in allPosts" v-bind:key="post.id" @infosPost="setInfos" />-->
         <div class="row" id="wallPost">
-            <div class="col-4" id="divButtonPost">
+            <div class="col-4" id="divButtonPost" v-if="user.token!==null">
                 <p>
                    <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#formCreatePost" aria-expanded="false" aria-controls="formCreatePost">
                     Que voulez-vous dire, {{ user.username }} ?          
@@ -14,13 +13,13 @@
                         <form>
                             <div class="form-group">
                                 <label for="formContentPost">Écrivez votre texte ici !</label>
-                                <textarea class="form-control" id="formContentPost" rows="3"></textarea>
+                                <textarea v-model="dataCreatePost.content" class="form-control" id="formContentPost" maxlength="150" rows="3" placeholder="150 caractères maximum"></textarea>
                             </div>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="formImagePost">
-                                <label class="custom-file-label" for="formImagePost">Choose file</label>
+                                <input type="file" @change="onFileSelected" class="custom-file-input" id="formImagePost">
+                                <label class="custom-file-label" for="formImagePost">Choisissez une image</label>
                             </div>
-                            <button type="submit" class="btn btn-info" id="buttonFormCreatePost">Publier</button>
+                            <button type="submit" @click.prevent="createPost" class="btn btn-info" id="buttonFormCreatePost">Publier</button>
                         </form>
                     </div>
                 </div>
@@ -36,14 +35,34 @@
                                 </div>
                             </div>
                                 <div class="card-body">
-                                    <p class="card-text">{{post.content}}</p>
+                                    <p class="card-text" v-if="post.content!=='null'">{{post.content}}</p>
+                                    <img :src="post.image" alt="" class="w-100" v-if="post.image">
                                 </div>
                             <div class="card-footer border-info">
                                 <div id="footerPost">
                                     <p id="pFooter">j'aime: {{ post.likes }}</p>
                                     <div id="footerPostButton" v-if="user.isAdmin==true || user.username==post.username">
-                                        <button type="button" class="btn btn-outline-info btn-sm">Modifier</button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm">Supprimer</button>
+                                        <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">Modifier</button>
+                                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Modifiez votre message ici</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {{post.id}}
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                        <button type="button" class="btn btn-info">Modifier</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" @click.prevent="deletePost" :id="post.id" class="btn btn-outline-danger btn-sm">Supprimer {{post.id}}</button>
                                     </div>             
                                 </div>
                             </div>
@@ -57,7 +76,6 @@
 
 <script>
 import NavbarMain from '@/components/NavbarMain.vue'
-//import Post from '@/components/Post.vue'
 import axios from "axios";
 import { mapState } from "vuex";
 
@@ -65,25 +83,72 @@ export default {
     name: 'Wall',
     components: {
         NavbarMain,
-        //Post,
     },
     data() {
         return {
-            post:{
-                id:"",
-                content:"",
-                image:""
+            allPosts: [],
+            dataCreatePost: {
+                content: null,
+                image: null
             },
-            allPosts: [] 
+            post: {
+                id: null
+            }
         } 
     },
     computed: {
         ...mapState(["user"])
     },
-    methods: {   
-        setInfos(payload) {
-            this.post = payload.post;
-        } 
+    methods: {  
+        onFileSelected(event) {
+            console.log(event)
+            this.dataCreatePost.image = event.target.files[0]
+        }, 
+        createPost(){
+            const fd = new FormData();
+            fd.append('image', this.dataCreatePost.image)
+            fd.append('content', this.dataCreatePost.content)
+            if (fd.get('image') !== null || fd.get('content') !== null){
+                if (fd.get('content').length <= 255 ) {
+                    axios.post('http://localhost:3000/api/wall/new', fd, {
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem('token')
+                        }
+                    })
+                        .then(response => {
+                            if (response) {
+                                window.location.reload();
+                            }
+                        })
+                        .catch(error => console.log(error))
+                }
+            } else {
+                alert("Echec de la publication")
+            }
+        },
+        deletePost(event){
+            if (event.target.id !== null) {
+                axios.delete('http://localhost:3000/api/wall/delete', {
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem('token')
+                    },          
+                    data: {
+                        id: event.target.id
+                    }
+                })
+                    .then(response => {
+                        if (response) {
+                            console.log(response)
+                            window.location.reload();
+                        }
+                    })
+                    .catch(error => console.log(error))
+            } else {
+                console.log('Id incorrect')
+            }
+            
+            
+        }
     },
     mounted() {
         this.$store.dispatch("getDataUser")
@@ -119,6 +184,7 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     height: 1.5rem;
+
 }
 
 #footerPost{

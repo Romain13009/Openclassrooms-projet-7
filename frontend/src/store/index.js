@@ -4,12 +4,12 @@ import axios from 'axios'
 export default createStore({
   state: {
     user: {
-      id:"",
-      email:"",
-      username:"",
-      description:"",
-      token:"",
-      isAdmin:""
+      id:null,
+      email:null,
+      username:null,
+      description:null,
+      token:null,
+      isAdmin:null
     }
   },
   mutations: {

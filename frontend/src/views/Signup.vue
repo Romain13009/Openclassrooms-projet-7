@@ -27,10 +27,10 @@ export default {
     data(){
         return {
             dataSignup: {
-                username:"",
-                email:"",
-                password:"",
-                description:""
+                username:null,
+                email:null,
+                password:null,
+                description:null
             },
             dataLogin: {
                 email: "",
@@ -46,7 +46,7 @@ export default {
             const regexPassword = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}/;
             const regexEmail = /^[a-z0-9!#$ %& '*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&' * +/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/g;
 
-            if ( this.dataSignup.username !== undefined && this.dataSignup.email !== undefined && this.dataSignup.password !== undefined) {
+            if ( this.dataSignup.username !== null && this.dataSignup.email !== null && this.dataSignup.password !== null) {
                 if ( this.dataSignup.username.length <= 13 && this.dataSignup.username.length >= 3) {
                     if(this.dataSignup.email.match(regexEmail) && this.dataSignup.password.match(regexPassword)) {
                         axios.post('http://localhost:3000/api/auth/users/signup', this.dataSignup)
@@ -76,60 +76,6 @@ export default {
             } else {
                 alert("Echec d'inscription, veuillez renseigner les champs email, username et password");
             }
-
-            
-
-            
-
-            /*var dataSignup = {
-                username: null,
-                email: null,
-                password: null,
-                description: null
-            }
-
-            var username = document.getElementById("defaultSignupFormName").value;
-            var email = document.getElementById("defaultSignupFormEmail").value;
-            var password = document.getElementById("defaultSignupFormPassword").value;
-            var description = document.getElementById("defaultSignupFormDescription").value;
-
-            const regexPassword = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}/;
-            const regexEmail = /^[a-z0-9!#$ %& '*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&' * +/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/g;
-
-            if ( username == null &&  email == null && password == null) {
-                return status(401).json({ error: 'Email, username ou password manquant' });
-            }
-
-            if ( username.length >= 13 || username.length <= 3) {
-                return status(401).json({ error: 'Username doit faire entre 4 et 12 caractères' });
-            }
-
-            if(email.match(regexEmail) && password.match(regexPassword)) {
-                dataSignup = {
-                    username: username,
-                    email: email,
-                    password: password,
-                    description: description
-                }
-                axios.post('http://localhost:3000/api/auth/users/signup', dataSignup)
-                    .then(() => {
-                        var dataLogin = {
-                            email: null,
-                            password: null,
-                        }
-                        
-                        dataLogin = {
-                            email: email,
-                            password: password
-                        }
-                        axios.post('http://localhost:3000/api/auth/users/login', dataLogin)
-                            .then(response => console.log(response))
-                            .catch(error => console.log( error ))
-                    })
-                    .catch(error => console.log( error ))
-            } else {
-                alert("Echec d'inscription")
-            }*/
         }
     }
 }

@@ -98,7 +98,7 @@ exports.deletePost = (req, res, next) => {
     const userId = decodedToken.userId; //On récupère l'id de la réponse
     const idPost = req.body.id
     
-
+    console.log(req.body.id)
     models.Post.findOne({
         attributes: ['id', 'content', 'UserId'],
         where: { id: idPost}

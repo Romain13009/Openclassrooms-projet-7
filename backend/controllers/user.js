@@ -167,17 +167,28 @@ exports.deleteUserProfile = (req, res, next) => {
                     where: { userId: userFound.id }
                 })
                     .then(() => {
-                        console.log(1)
-                        models.Post.destroy({
+                        models.Post.findAll({
                             where: { userId: userFound.id }
+                            .then((postsFound) => {
+                                if (postsFound.image) {
+                                    const filename = postsFound.image.split('/image/')[1]
+                                    fs.unlink(`images/${filename}`, () => {
+                                        models.Post.destroy({
+                                            where: { userId: userFound.id }
+                                        })
+                                        models.User.destroy({
+                                            where: { id: userId }
+                                        })
+                                            .then(() => res.status(200).json({ message: 'Utilisateur et publications supprimés' }))
+                                            .catch(function(){
+                                                return res.status(404).json({ error: 'Problème lors de la suppression de l utilisateur' });
+                                        })            
+                                    })     
+                                                       
+                                }
+                            })
                         })
-                        models.User.destroy({
-                            where: { id: userId }
-                        })
-                        .then(() => res.status(200).json({ message: 'Utilisateur et publications supprimés' }))
-                        .catch(function(){
-                            return res.status(404).json({ error: 'Problème lors de la suppression de l utilisateur' });
-                        })      
+                        
                     })
                     .catch(function(){
                         return res.status(404).json({ error: 'Destruction dans la table Likes impossible' });

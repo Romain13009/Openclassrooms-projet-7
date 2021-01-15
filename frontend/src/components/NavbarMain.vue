@@ -5,14 +5,17 @@
         </div>
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <router-link class="nav-link text-info" to="/">Wall</router-link>
+                <li class="nav-item active" v-if="user.token!==null">
+                    <router-link class="nav-link text-info" to="/wall">Wall</router-link>
                 </li>
-                <li class="nav-item active">
-                    <router-link class="nav-link text-info" to="/">Mon compte</router-link>
+                <li class="nav-item active" v-if="user.token!==null">
+                    <router-link class="nav-link text-info" to="/profile">Mon compte</router-link>
                 </li>
-                <li class="nav-item">
-                    <router-link class="nav-link text-danger" to="/">Deconnexion</router-link>
+                <li class="nav-item" v-if="user.token!==null">
+                    <router-link class="nav-link text-danger" to="/" @click.prevent="disconnect">Deconnexion</router-link>
+                </li>
+                <li class="nav-item" v-if="user.token==null">
+                    <router-link class="nav-link text-danger" to="/">Veuillez vous connecter</router-link>
                 </li>
             </ul>
         </div>
@@ -20,8 +23,19 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
     name: 'NavbarMain',
+    computed: {
+    ...mapState(["user"])
+    },
+    methods: {
+        disconnect() {
+            localStorage.clear();
+            window.location="/"
+        }
+    }
 }
 </script>
 
