@@ -100,7 +100,7 @@ exports.deletePost = (req, res, next) => {
     
     console.log(req.body.id)
     models.Post.findOne({
-        attributes: ['id', 'content', 'UserId'],
+        attributes: ['id', 'content', 'image', 'UserId'],
         where: { id: idPost}
     })
         .then(function(postFound) {
@@ -108,9 +108,15 @@ exports.deletePost = (req, res, next) => {
                 attributes: ['id', 'isAdmin'],
                 where: { id: userId }
             })
-                .then(user => {
-                    if ( user.isAdmin == true || user.id == postFound.UserId ) {
-
+            .then(function(userFound){
+                models.Like.destroy({
+                    where: {
+                        postId: idPost
+                    }
+                })
+                .then(() => {
+                    console.log(3)
+                    if ( userFound.isAdmin == true || userFound.id == postFound.UserId ) {
                         if (postFound.image) {
                             const filename = postFound.image.split('/images/')[1]
                             fs.unlink(`images/${filename}`, () => {
@@ -121,7 +127,6 @@ exports.deletePost = (req, res, next) => {
                                     .catch(error => res.status(400).json({ error }));
                             });
                         } else {
-
                             models.Post.destroy({
                             where: { id: idPost }
                             })
@@ -135,6 +140,10 @@ exports.deletePost = (req, res, next) => {
                 .catch(function(){
                     return res.status(404).json({ error: 'Utilisateur introuvable ou action non autorisée' });
                 })
+            })
+            .catch(function(){
+                return res.status(404).json({ error: 'Problème base de données' });
+            })
         }) 
         .catch(function(){
             return res.status(404).json({ error: 'Publication introuvable' });
@@ -201,7 +210,7 @@ exports.updatePost = (req, res, next) => {
 //LIKER UN POST
 exports.likePost = (req, res, next) => {
         //Paramètres
-        var postId = parseInt(req.params.postId)
+        var postId = req.body.id;
 
         const token = req.headers.authorization.split(' ')[1]; //On récupère le token (on split autour de l'espace), on récupère un tableau dont on prend le second élément (le 1)
         const decodedToken = jwt.verify(token, JWT_CLE_SECRETE); //On décode le token, on utilise la clé secrete, le token décodé devient un objet js
@@ -215,6 +224,7 @@ exports.likePost = (req, res, next) => {
             where: { id: postId}
         })
             .then(function(postFound){ //On cherche le post
+                console.log(1)
                 models.User.findOne({
                     where: {id: userId}
                 })
@@ -261,7 +271,7 @@ exports.likePost = (req, res, next) => {
 //DISLIKER UN POST
 exports.dislikePost = (req, res, next) => {
     //Paramètres
-    var postId = parseInt(req.params.postId)
+    var postId = req.body.id;
 
     const token = req.headers.authorization.split(' ')[1]; //On récupère le token (on split autour de l'espace), on récupère un tableau dont on prend le second élément (le 1)
     const decodedToken = jwt.verify(token, JWT_CLE_SECRETE); //On décode le token, on utilise la clé secrete, le token décodé devient un objet js
@@ -301,7 +311,7 @@ exports.dislikePost = (req, res, next) => {
                             return res.status(500).json({ error: 'erreur' });
                         })
                     } else {
-                        return res.status(400).json({ error: 'Vous avez déjà disliké cette publication' });
+                        return res.status(400).json({ error: 'Vous ne pouvez pas disliker cette publication' });
                     }
                 })
                 .catch(function(){

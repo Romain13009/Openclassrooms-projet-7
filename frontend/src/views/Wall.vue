@@ -40,9 +40,11 @@
                                 </div>
                             <div class="card-footer border-info">
                                 <div id="footerPost">
-                                    <p id="pFooter">j'aime: {{ post.likes }}</p>
+                                    <div class="divLike">
+                                        <button class="btn btn-outline-light buttonLike" @click.prevent="addLike" type="button" :id="post.id"><i class="fas fa-thumbs-up" :id="post.id"></i></button><p>{{ post.likes }}</p>
+                                    </div>          
                                     <div id="footerPostButton" v-if="user.isAdmin==true || user.username==post.username">
-                                        <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">Modifier</button>
+                                        <button type="button" @click.prevent="ModifPostId" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal" :id="post.id" >Modifier</button>
                                         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
@@ -53,16 +55,17 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        {{post.id}}
+                                                        <label for="formContentModif">Écrivez votre texte ici !</label>
+                                                        <textarea v-model="dataModifPost.content" class="form-control" id="formContentModif" maxlength="150" rows="3" placeholder="150 caractères maximum"></textarea>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                                        <button type="button" class="btn btn-info">Modifier</button>
+                                                        <button type="button" @click.prevent="ModifPost" :id="post.id" class="btn btn-info">Modifier</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="button" @click.prevent="deletePost" :id="post.id" class="btn btn-outline-danger btn-sm">Supprimer {{post.id}}</button>
+                                        <button type="button" @click.prevent="deletePost" :id="post.id" class="btn btn-outline-danger btn-sm">Supprimer</button>
                                     </div>             
                                 </div>
                             </div>
@@ -91,7 +94,11 @@ export default {
                 content: null,
                 image: null
             },
-            post: {
+            dataModifPost: {
+                content: null,
+                id: null
+            },
+            like: {
                 id: null
             }
         } 
@@ -145,9 +152,48 @@ export default {
                     .catch(error => console.log(error))
             } else {
                 console.log('Id incorrect')
-            }
-            
-            
+            }   
+        },
+        ModifPostId(event) {
+            this.dataModifPost.id = event.target.id
+        },
+        ModifPost() {
+            console.log('Modification du post id = ' + this.dataModifPost.id)
+            if (event.target.id !== null) {
+                axios.put('http://localhost:3000/api/wall/update', this.dataModifPost,{
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem('token')
+                    },          
+                })
+                    .then(response => {
+                        if (response) {
+                            console.log(response)
+                            window.location.reload();
+                        }
+                    })
+                    .catch(error => console.log(error))
+            } else {
+                console.log('Id incorrect')
+            }  
+        },
+        addLike(event) {
+            if (event.target.id !== null) {
+                this.like.id = event.target.id
+                axios.post('http://localhost:3000/api/wall/posts/like', this.like,{
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem('token')
+                    },      
+                })
+                    .then(response => {
+                        if (response) {
+                            console.log(response)
+                            window.location.reload();
+                        }
+                    })
+                    .catch(error => console.log(error))
+            } else {
+                console.log('Id incorrect')
+            }   
         }
     },
     mounted() {
@@ -203,11 +249,6 @@ export default {
     justify-content: space-between;
 }
 
-#pFooter{
-    margin-top: auto;
-    margin-bottom: auto;
-}
-
 #buttonPost{
     height: 3rem;
 }
@@ -226,4 +267,22 @@ export default {
 #buttonFormCreatePost{
     margin-top: 1rem;
 }
+
+.divLike{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    align-items:center;
+}
+
+.divLike > p {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 0.5rem;
+}
+
+.buttonLike {
+    color: rgb(0, 206, 69);
+}
+
 </style>

@@ -56,7 +56,7 @@
 
 <script>
 import NavbarMain from '@/components/NavbarMain.vue'
-//import axios from "axios";
+import axios from "axios";
 import { mapState } from "vuex";
 
 export default {
@@ -75,7 +75,7 @@ export default {
         ...mapState(["user"])
     },
     methods: {
-        /*deleteUser() {
+        deleteUser() {
             axios.delete('http://localhost:3000/api/auth/users/delete', {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem('token')
@@ -85,10 +85,20 @@ export default {
                 localStorage.clear()
                 window.location="/signup"
             })
-        },*/
+        },
         modifDescription() {
-            
-        }
+            axios.put('http://localhost:3000/api/auth/users/profile', this.dataModif,{
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem('token')
+                }
+            })
+            .then(response => {
+                if (response) {
+                    window.location.reload();
+                }
+            })
+            .catch(error => console.log(error))
+        }   
     },
     mounted() {
         this.$store.dispatch("getDataUser")
