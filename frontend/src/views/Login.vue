@@ -25,8 +25,8 @@ export default {
     data() {
         return {
             dataLogin: {
-                email: "",
-                password: ""
+                email: null,
+                password: null
             }
         }
     },
@@ -43,8 +43,12 @@ export default {
                         localStorage.setItem('token', response.data.token)
                         window.location="/wall"
                     })
+                    .catch((error) => {
+                                console.log( error + ' Email ou mot de passe incorrect.' )
+                                alert('ERREUR ! Email ou mot de passe incorrect.')
+                    })
             } else {
-                alert('Email ou mot de passe incorrects')
+                alert('ERREUR ! Veuillez renseigner les champs Email et Mot de passe.')
             }
         }
     }

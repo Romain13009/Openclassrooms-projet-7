@@ -85,19 +85,29 @@ export default {
                 localStorage.clear()
                 window.location="/signup"
             })
+            .catch((error) => {
+                console.log(error)
+                alert('ERREUR ! Suppression du compte impossible, contactez un administrateur.')
+            })
         },
         modifDescription() {
+            if (this.dataModif.description == null) {
+                this.dataModif.description = ' '
+            }
             axios.put('http://localhost:3000/api/auth/users/profile', this.dataModif,{
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem('token')
                 }
             })
-            .then(response => {
-                if (response) {
-                    window.location.reload();
-                }
+                .then(response => {
+                    if (response) {
+                        window.location.reload();
+                    }
+                })
+                .catch((error) => {
+                    console.log(error)
+                    alert('ERREUR ! Modification impossible.')
             })
-            .catch(error => console.log(error))
         }   
     },
     mounted() {

@@ -112,26 +112,29 @@ export default {
             this.dataCreatePost.image = event.target.files[0]
         }, 
         createPost(){
-            const fd = new FormData();
-            fd.append('image', this.dataCreatePost.image)
-            fd.append('content', this.dataCreatePost.content)
-            if (fd.get('image') !== null || fd.get('content') !== null){
-                if (fd.get('content').length <= 255 ) {
-                    axios.post('http://localhost:3000/api/wall/new', fd, {
-                        headers: {
-                            Authorization: "Bearer " + localStorage.getItem('token')
-                        }
-                    })
+                const fd = new FormData();
+                fd.append('image', this.dataCreatePost.image)
+                fd.append('content', this.dataCreatePost.content)
+                if (fd.get('image') !== 'null' || fd.get('content') !== 'null'){
+                    if (fd.get('content').length <= 255 ) {
+                        axios.post('http://localhost:3000/api/wall/new', fd, {
+                            headers: {
+                                Authorization: "Bearer " + localStorage.getItem('token')
+                            }
+                        })
                         .then(response => {
                             if (response) {
                                 window.location.reload();
                             }
                         })
-                        .catch(error => console.log(error))
+                        .catch((error) => {
+                            console.log(error)
+                            alert("ERREUR ! Echec de la publication.")
+                        })
+                    }
+                } else {
+                    alert("ERREUR ! Echec de la publication, assurez vous que votre message contienne du texte et/ou une image.")
                 }
-            } else {
-                alert("Echec de la publication")
-            }
         },
         deletePost(event){
             if (event.target.id !== null) {
@@ -149,9 +152,13 @@ export default {
                             window.location.reload();
                         }
                     })
-                    .catch(error => console.log(error))
+                    .catch((error) => {
+                        console.log(error)
+                        alert('ERREUR ! Une erreur est survenue.')
+                    })
             } else {
                 console.log('Id incorrect')
+                alert('ERREUR ! Publication introuvable.')
             }   
         },
         ModifPostId(event) {
@@ -160,20 +167,28 @@ export default {
         ModifPost() {
             console.log('Modification du post id = ' + this.dataModifPost.id)
             if (event.target.id !== null) {
-                axios.put('http://localhost:3000/api/wall/update', this.dataModifPost,{
-                    headers: {
-                        Authorization: "Bearer " + localStorage.getItem('token')
-                    },          
-                })
-                    .then(response => {
-                        if (response) {
-                            console.log(response)
-                            window.location.reload();
-                        }
+                if (this.dataModifPost.content !== null) {
+                    axios.put('http://localhost:3000/api/wall/update', this.dataModifPost,{
+                        headers: {
+                            Authorization: "Bearer " + localStorage.getItem('token')
+                        },          
                     })
-                    .catch(error => console.log(error))
+                        .then(response => {
+                            if (response) {
+                                console.log(response)
+                                window.location.reload();
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                            alert('ERREUR ! Une erreur est survenue.')
+                        })    
+                } else {
+                    alert('ERREUR ! Veuillez remplir le champ.')
+                }
             } else {
                 console.log('Id incorrect')
+                alert('ERREUR ! Publication introuvable.')
             }  
         },
         addLike(event) {
@@ -190,9 +205,13 @@ export default {
                             window.location.reload();
                         }
                     })
-                    .catch(error => console.log(error))
+                    .catch((error) => {
+                        console.log(error)
+                        alert('ERREUR ! Vous avez déjà liké cette publication.')
+                    })
             } else {
                 console.log('Id incorrect')
+                alert('ERREUR ! Publication introuvable.')
             }   
         }
     },

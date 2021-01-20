@@ -33,8 +33,8 @@ export default {
                 description:null
             },
             dataLogin: {
-                email: "",
-                password: ""
+                email: null,
+                password: null
             }
         };
     },
@@ -47,7 +47,7 @@ export default {
             const regexEmail = /^[a-z0-9!#$ %& '*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&' * +/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/g;
 
             if ( this.dataSignup.username !== null && this.dataSignup.email !== null && this.dataSignup.password !== null) {
-                if ( this.dataSignup.username.length <= 13 && this.dataSignup.username.length >= 3) {
+                if ( this.dataSignup.username.length <= 13 && this.dataSignup.username.length >= 4) {
                     if(this.dataSignup.email.match(regexEmail) && this.dataSignup.password.match(regexPassword)) {
                         axios.post('http://localhost:3000/api/auth/users/signup', this.dataSignup)
                             .then(() => {
@@ -66,15 +66,18 @@ export default {
                                     })
                                     .catch(error => console.log( error ))
                             })
-                            .catch(error => console.log( error ))
+                            .catch((error) => {
+                                console.log( error + ' Cette adresse mail a déjà été utilisée.' )
+                                alert('ERREUR ! Cette adresse mail a déjà été utilisée.')
+                            })
                     } else {
-                        alert("Echec d'inscription, assurez vous que votre mail ou que votre mot de passe soit valide (au moins une majuscule, une minucule, un nombre et 8 caractères)");
+                        alert("ERREUR ! Echec d'inscription, assurez vous que votre Email et que votre mot de passe soient valides (au moins une majuscule, une minucule, un nombre et 8 caractères)");
                     }
                 } else {
-                    alert("Echec d'inscription, votre username doit faire entre 4 et 12 caractères");
+                    alert("ERREUR ! Echec d'inscription, votre username doit faire entre 4 et 12 caractères");
                 }
             } else {
-                alert("Echec d'inscription, veuillez renseigner les champs email, username et password");
+                alert("ERREUR ! Echec d'inscription, veuillez renseigner les champs email, username et password");
             }
         }
     }

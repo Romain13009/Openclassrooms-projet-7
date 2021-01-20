@@ -25,11 +25,6 @@ exports.createPost = (req, res, next) => {
         return res.status(401).json({ error: 'Contenu du post vide' });
     }
 
-    //On vérifie que le content contient au moins 2 caractères
-    if(content.length <= 2) {
-        return res.status(401).json({ error: 'Contenu du post doit faire au moins 2 caractères' });
-    }
-
     models.User.findOne({
         where: { id: userId }
     })
