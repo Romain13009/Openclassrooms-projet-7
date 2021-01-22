@@ -11,11 +11,11 @@
                         <p class="mt-2 card-text">{{ user.description }}</p>
                         <div class="border-top pt-3">
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-lg-6">
                                     <h6>E-mail:</h6>
                                     <p>{{ user.email }}</p>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-lg-6">
                                     <h6>Modifiez votre description:</h6>
                                     <!-- Button trigger modal -->
                                     <p>
@@ -121,6 +121,8 @@ export default {
     margin-top: 6rem;
     display: flex;
     justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .cardMain {
@@ -137,7 +139,7 @@ export default {
 }
 
 h6 {
-    font-size: .9375rem
+    font-size: 1rem
 }
 
 .buttonModif{

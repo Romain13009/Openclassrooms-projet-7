@@ -1,8 +1,8 @@
 <template>
     <div>
         <NavbarConnexion />
-        <main class="main justify-content-center">
-            <form class="text-center border border-light p-5 w-25" id="formulaire">
+        <main class="main">
+            <form class="text-center border border-light w-50">
                 <p class="h4 mb-4">INSCRIPTION</p>
                 <input type="Name" v-model="dataSignup.username" id="defaultSignupFormName" class="form-control mb-4" placeholder="Username (12 caractères maximum)" required>
                 <input type="email" v-model="dataSignup.email" id="defaultSignupFormEmail" class="form-control mb-4" placeholder="E-mail" required>
@@ -88,5 +88,11 @@ export default {
 .main {
     display: flex;
     justify-content: center;
+    margin-top: 30px;
+    
 }
+form {
+    max-width: 400px;
+}
+
 </style>

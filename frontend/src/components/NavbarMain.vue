@@ -1,25 +1,50 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="collapse navbar-collapse justify-content-center">
-            <a href="#"><img class="w-50" src="../assets/icon-left-font-monochrome-white.svg" alt="Logo"/></a>
-        </div>
-        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-            <ul class="navbar-nav">
+    <nav class="navbar navbar-expand-lg justify-content-between navbar-dark bg-dark">
+        <img id="navbarLogo" src="../assets/icon-left-font-monochrome-white.svg" alt="Logo"/>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav ">
                 <li class="nav-item active" v-if="user.token!==null">
                     <router-link class="nav-link text-info" to="/wall">Wall</router-link>
                 </li>
-                <li class="nav-item active" v-if="user.token!==null">
+                 <li class="nav-item active" v-if="user.token!==null">
                     <router-link class="nav-link text-info" to="/profile">Mon compte</router-link>
                 </li>
                 <li class="nav-item" v-if="user.token!==null">
                     <router-link class="nav-link text-danger" to="/" @click.prevent="disconnect">Deconnexion</router-link>
                 </li>
                 <li class="nav-item" v-if="user.token==null">
-                    <router-link class="nav-link text-danger" to="/">Veuillez vous connecter</router-link>
+                        <router-link class="nav-link text-danger" to="/">Veuillez vous connecter</router-link>
                 </li>
             </ul>
         </div>
     </nav>
+    <!--<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div id="navbarContent">
+            <img id="navbarLogo" src="../assets/icon-left-font-monochrome-white.svg" alt="Logo"/>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="navbarContentRight" class="collapse navbar-collapse">
+                <ul id="navbarList">
+                    <li class="nav-item active" v-if="user.token!==null">
+                        <router-link class="nav-link text-info" to="/wall">Wall</router-link>
+                    </li>
+                    <li class="nav-item active" v-if="user.token!==null">
+                        <router-link class="nav-link text-info" to="/profile">Mon compte</router-link>
+                    </li>
+                    <li class="nav-item" v-if="user.token!==null">
+                        <router-link class="nav-link text-danger" to="/" @click.prevent="disconnect">Deconnexion</router-link>
+                    </li>
+                    <li class="nav-item" v-if="user.token==null">
+                        <router-link class="nav-link text-danger" to="/">Veuillez vous connecter</router-link>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>-->
 </template>
 
 <script>
@@ -46,5 +71,17 @@ export default {
     min-height: 80px;
     width: 100vw;
     margin-top: -6rem;
+}
+
+#navbarLogo {
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 250px;
+}
+
+@media all and (max-width: 767px){
+    #navbarLogo {
+    width: 130px;
+    }
 }
 </style>

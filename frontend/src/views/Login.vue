@@ -1,8 +1,8 @@
 <template>
     <div>
        <NavbarConnexion />
-       <main class="main justify-content-center">
-            <form class="text-center border border-light p-5 w-25" action="#!">
+       <main class="main">
+            <form class="text-center border border-light w-50">
                 <p class="h4 mb-4">IDENTIFICATION</p>
                 <input type="email" v-model="dataLogin.email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="E-mail">
                 <input type="password" v-model="dataLogin.password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Mot de passe">
@@ -59,5 +59,12 @@ export default {
 .main {
     display: flex;
     justify-content: center;
+    margin-top: 30px;
+    
 }
+
+form {
+    max-width: 400px;
+}
+
 </style>

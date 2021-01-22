@@ -1,8 +1,8 @@
 <template>
     <div>
         <NavbarMain />
-        <div class="row" id="wallPost">
-            <div class="col-4" id="divButtonPost" v-if="user.token!==null">
+        <div class="row justify-content-center" id="wallPost">
+            <div class="col-lg-5" id="divButtonPost" v-if="user.token!==null">
                 <p>
                    <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#formCreatePost" aria-expanded="false" aria-controls="formCreatePost">
                     Que voulez-vous dire, {{ user.username }} ?          
@@ -24,10 +24,10 @@
                     </div>
                 </div>
             </div>        
-            <div class="col-8"> 
-                <div v-for="post in allPosts" v-bind:key="post.id">
+            <div class="col-lg-5" id="posts"> 
+                <div v-for="post in allPosts" v-bind:key="post.id" id="test">
                     <div id="containerPosts">
-                        <div class="card border-info mb-3" style="width: 26rem;">
+                        <div class="card border-info ">
                             <div class="card-header text-info">
                                 <div id="headerPost">
                                     <p>{{ post.username }}</p>
@@ -234,15 +234,11 @@ export default {
 <style scoped>
 #wallPost{
     margin-top: 6rem;
-    display: flex;
-    flex-direction: row;
+    width: 100vw;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-#containerPosts{
-    display: flex;
-    justify-content: left;
-    
-}
 
 #headerPost{
     display: flex;
@@ -297,11 +293,26 @@ export default {
 .divLike > p {
     margin-top: auto;
     margin-bottom: auto;
-    margin-left: 0.5rem;
+    /*margin-left: 0.5rem;*/
 }
 
 .buttonLike {
     color: rgb(0, 206, 69);
 }
 
+#containerPosts{
+    margin-top: 0.4rem;
+}
+
+@media all and (max-width: 600px){
+    #formCreatePost{
+    width: 90vw;
+    }
+}
+@media all and (max-width: 992px){
+    #posts{
+        margin-top: 1rem;
+    }  
+
+}
 </style>
