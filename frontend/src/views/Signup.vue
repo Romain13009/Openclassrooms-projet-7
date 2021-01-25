@@ -8,7 +8,7 @@
                 <input type="email" v-model="dataSignup.email" id="defaultSignupFormEmail" class="form-control mb-4" placeholder="E-mail" required>
                 <input type="password" v-model="dataSignup.password" id="defaultSignupFormPassword" class="form-control mb-4" placeholder="Mot de passe" required>
                 <input type="text" v-model="dataSignup.description" id="defaultSignupFormDescription" class="form-control mb-4" placeholder="Description (optionnelle)">
-                <button class="btn btn-info btn-block my-1" type="submit" @click.prevent="signupSend" >Inscription</button>
+                <button class="btn buttonMain btn-block my-1" type="submit" @click.prevent="signupSend" >Inscription</button>
             </form>
         </main>
     </div>
@@ -60,14 +60,14 @@ export default {
                                 localStorage.removeItem('token')
                                 axios.post('http://localhost:3000/api/auth/users/login', dataLogin)
                                     .then(response => {
-                                        console.log(response);
                                         localStorage.setItem('token', response.data.token)
                                         window.location="/wall"
                                     })
-                                    .catch(error => console.log( error ))
+                                    .catch(() => {
+                                        alert('ERREUR ! Inscription impossible, réessayez plus tard.')
+                                    })
                             })
-                            .catch((error) => {
-                                console.log( error + ' Cette adresse mail a déjà été utilisée.' )
+                            .catch(() => {
                                 alert('ERREUR ! Cette adresse mail a déjà été utilisée.')
                             })
                     } else {

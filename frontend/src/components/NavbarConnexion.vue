@@ -1,14 +1,14 @@
 <template>
-    <nav class="row navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="row navbar navbar-expand-lg" style="bgNavbar">
         <div id="navbarContent">
             <img id="navbarLogo" src="../assets/icon-left-font-monochrome-white.svg" alt="Logo"/>
             <div id="navbarContentRight">
                 <ul id="navbarList">
                     <li class="nav-item active">
-                        <router-link class="nav-link text-light" to="/">S'identifier</router-link>
+                        <router-link class="nav-link routerWhite" to="/">S'identifier</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link text-info" to="/signup">S'inscrire</router-link>
+                        <router-link class="nav-link routerRed" to="/signup">S'inscrire</router-link>
                     </li>
                 </ul>
             </div>
@@ -17,8 +17,9 @@
 </template>
 
 <script>
+
 export default {
-    name: 'NavbarConnexion',
+    name: 'NavbarConnexion'
 }
 </script>
 

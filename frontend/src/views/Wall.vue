@@ -4,7 +4,7 @@
         <div class="row justify-content-center" id="wallPost">
             <div class="col-lg-5" id="divButtonPost" v-if="user.token!==null">
                 <p>
-                   <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#formCreatePost" aria-expanded="false" aria-controls="formCreatePost">
+                   <button class="btn buttonMain" type="button" data-toggle="collapse" data-target="#formCreatePost" aria-expanded="false" aria-controls="formCreatePost">
                     Que voulez-vous dire, {{ user.username }} ?          
                     </button>
                 </p>
@@ -19,7 +19,7 @@
                                 <input type="file" @change="onFileSelected" class="custom-file-input" id="formImagePost">
                                 <label class="custom-file-label" for="formImagePost">Choisissez une image</label>
                             </div>
-                            <button type="submit" @click.prevent="createPost" class="btn btn-info" id="buttonFormCreatePost">Publier</button>
+                            <button type="submit" @click.prevent="createPost" class="btn buttonMain" id="buttonFormCreatePost">Publier</button>
                         </form>
                     </div>
                 </div>
@@ -27,8 +27,8 @@
             <div class="col-lg-5" id="posts"> 
                 <div v-for="post in allPosts" v-bind:key="post.id" id="test">
                     <div id="containerPosts">
-                        <div class="card border-info ">
-                            <div class="card-header text-info">
+                        <div class="card postBorder ">
+                            <div class="card-header textPost">
                                 <div id="headerPost">
                                     <p>{{ post.username }}</p>
                                     <p>le {{ post.createdAt.split('T')[0] }} à {{ post.createdAt.split("T").pop().split(".000Z")[0] }}</p>
@@ -38,13 +38,13 @@
                                     <p class="card-text" v-if="post.content!=='null'">{{post.content}}</p>
                                     <img :src="post.image" alt="" class="w-100" v-if="post.image">
                                 </div>
-                            <div class="card-footer border-info">
+                            <div class="card-footer">
                                 <div id="footerPost">
                                     <div class="divLike">
                                         <button class="btn btn-outline-light buttonLike" @click.prevent="addLike" type="button" :id="post.id"><i class="fas fa-thumbs-up" :id="post.id"></i></button><p>{{ post.likes }}</p>
                                     </div>          
                                     <div id="footerPostButton" v-if="user.isAdmin==true || user.username==post.username">
-                                        <button type="button" @click.prevent="ModifPostId" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal" :id="post.id" >Modifier</button>
+                                        <button type="button" @click.prevent="ModifPostId" class="btn buttonSecondary btn-sm" data-toggle="modal" data-target="#exampleModal" :id="post.id" >Modifier</button>
                                         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
@@ -60,12 +60,12 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                                        <button type="button" @click.prevent="ModifPost" :id="post.id" class="btn btn-info">Modifier</button>
+                                                        <button type="button" @click.prevent="ModifPost" :id="post.id" class="btn buttonMain">Modifier</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="button" @click.prevent="deletePost" :id="post.id" class="btn btn-outline-danger btn-sm">Supprimer</button>
+                                        <button type="button" @click.prevent="deletePost" :id="post.id" class="btn buttonMain btn-sm">Supprimer</button>
                                     </div>             
                                 </div>
                             </div>
@@ -108,7 +108,6 @@ export default {
     },
     methods: {  
         onFileSelected(event) {
-            console.log(event)
             this.dataCreatePost.image = event.target.files[0]
         }, 
         createPost(){
@@ -127,8 +126,7 @@ export default {
                                 window.location.reload();
                             }
                         })
-                        .catch((error) => {
-                            console.log(error)
+                        .catch(() => {
                             alert("ERREUR ! Echec de la publication.")
                         })
                     }
@@ -148,16 +146,13 @@ export default {
                 })
                     .then(response => {
                         if (response) {
-                            console.log(response)
                             window.location.reload();
                         }
                     })
-                    .catch((error) => {
-                        console.log(error)
+                    .catch(() => {
                         alert('ERREUR ! Une erreur est survenue.')
                     })
             } else {
-                console.log('Id incorrect')
                 alert('ERREUR ! Publication introuvable.')
             }   
         },
@@ -165,7 +160,6 @@ export default {
             this.dataModifPost.id = event.target.id
         },
         ModifPost() {
-            console.log('Modification du post id = ' + this.dataModifPost.id)
             if (event.target.id !== null) {
                 if (this.dataModifPost.content !== null) {
                     axios.put('http://localhost:3000/api/wall/update', this.dataModifPost,{
@@ -175,19 +169,16 @@ export default {
                     })
                         .then(response => {
                             if (response) {
-                                console.log(response)
                                 window.location.reload();
                             }
                         })
-                        .catch((error) => {
-                            console.log(error)
+                        .catch(() => {
                             alert('ERREUR ! Une erreur est survenue.')
                         })    
                 } else {
                     alert('ERREUR ! Veuillez remplir le champ.')
                 }
             } else {
-                console.log('Id incorrect')
                 alert('ERREUR ! Publication introuvable.')
             }  
         },
@@ -201,16 +192,13 @@ export default {
                 })
                     .then(response => {
                         if (response) {
-                            console.log(response)
                             window.location.reload();
                         }
                     })
-                    .catch((error) => {
-                        console.log(error)
+                    .catch(() => {
                         alert('ERREUR ! Vous avez déjà liké cette publication.')
                     })
             } else {
-                console.log('Id incorrect')
                 alert('ERREUR ! Publication introuvable.')
             }   
         }
@@ -223,10 +211,11 @@ export default {
             }
         })
         .then(response => {
-          console.log(response.data);
           this.allPosts = response.data
         })
-        .catch(error => console.log(error))
+        .catch(() => {
+            alert('ERREUR ! Une erreur est survenue.')
+        })
     }
 }
 </script>
@@ -293,7 +282,6 @@ export default {
 .divLike > p {
     margin-top: auto;
     margin-bottom: auto;
-    /*margin-left: 0.5rem;*/
 }
 
 .buttonLike {

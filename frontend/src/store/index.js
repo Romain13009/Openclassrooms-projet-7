@@ -30,7 +30,6 @@ export default createStore({
         }
       })
         .then(response => {
-          console.log(response);
           context.commit("saveDataUser", [response.data.id, response.data.email, response.data.username, response.data.description, response.data.isAdmin])
         })
         .catch(error => console.log(error))

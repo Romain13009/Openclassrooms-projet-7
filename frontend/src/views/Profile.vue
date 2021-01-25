@@ -19,7 +19,7 @@
                                     <h6>Modifiez votre description:</h6>
                                     <!-- Button trigger modal -->
                                     <p>
-                                    <button class="btn btn-info buttonModif" type="button" data-toggle="collapse" data-target="#formCreatePost" aria-expanded="false" aria-controls="formCreatePost">
+                                    <button class="btn buttonSecondary buttonModif" type="button" data-toggle="collapse" data-target="#formCreatePost" aria-expanded="false" aria-controls="formCreatePost">
                                         ici        
                                         </button>
                                     </p>
@@ -30,7 +30,7 @@
                                                     <label for="formContentPost">Modifiez votre description ici !</label>
                                                     <textarea v-model="dataModif.description" class="form-control" id="formContentPost" maxlength="150" rows="3" placeholder="150 caractères maximum"></textarea>
                                                 </div>
-                                                <button type="submit" class="btn btn-info" id="buttonFormCreatePost" @click.prevent="modifDescription">Sauvegardez vos modification</button>
+                                                <button type="submit" class="btn buttonMain" id="buttonFormCreatePost" @click.prevent="modifDescription">Sauvegardez vos modification</button>
                                             </form>
                                         </div>
                                     </div>
@@ -43,7 +43,7 @@
                                 <div class="col-12">
                                     <h6>Supprimez votre compte</h6>
                                     <h6>Attention, cette action est irréversible et entraînera une suppression des publications !</h6>
-                                    <button type="button" class="btn btn-danger buttonModif" @click.prevent="deleteUser">Ici</button>
+                                    <button type="button" class="btn buttonMain buttonModif" @click.prevent="deleteUser">Ici</button>
                                 </div>
                             </div>
                         </div>
@@ -85,8 +85,7 @@ export default {
                 localStorage.clear()
                 window.location="/signup"
             })
-            .catch((error) => {
-                console.log(error)
+            .catch(() => {
                 alert('ERREUR ! Suppression du compte impossible, contactez un administrateur.')
             })
         },
@@ -104,8 +103,7 @@ export default {
                         window.location.reload();
                     }
                 })
-                .catch((error) => {
-                    console.log(error)
+                .catch(() => {
                     alert('ERREUR ! Modification impossible.')
             })
         }   
