@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-lg justify-content-between">
         <img id="navbarLogo" src="../assets/icon-left-font-monochrome-white.svg" alt="Logo"/>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span><i class="fas fa-bars"></i></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav ">
@@ -41,11 +41,13 @@ export default {
 </script>
 
 <style scoped>
-.navbar {
+
+nav {
     position: fixed;
-    z-index: 1;
+    z-index: 2;
     min-height: 80px;
     width: 100vw;
+    max-width: 100vw;
     margin-top: -6rem;
 }
 

@@ -11,6 +11,7 @@
   $colorSecondaryHover: #a84249;
   $color3: white;
   
+  
   //NAVIGATION
   .navbar{
     background: $colorMain;
@@ -43,9 +44,17 @@
     background: $colorSecondaryHover;
   }
 
+  .navbar-toggler{
+    i{
+      color: white;
+    }
+  }
+    .navbar-toggler:focus{
+      outline: none;
+  }
   //POST
   .postBorder{
-    border:  2px solid $colorMain;
+    border:  1px solid $colorMain;
   }
 
   .textPost{

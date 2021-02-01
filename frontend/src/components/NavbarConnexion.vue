@@ -1,5 +1,5 @@
 <template>
-    <nav class="row navbar navbar-expand-lg" style="bgNavbar">
+    <nav class="navbar navbar-expand-lg" style="bgNavbar">
         <div id="navbarContent">
             <img id="navbarLogo" src="../assets/icon-left-font-monochrome-white.svg" alt="Logo"/>
             <div id="navbarContentRight">
@@ -26,6 +26,7 @@ export default {
 <style scoped>
 .navbar {
     min-height: 80px;
+    max-width: 100vw;
 }
 
 #navbarContent{

@@ -1,8 +1,8 @@
 <template>
     <div>
         <NavbarMain />
-        <div class="row justify-content-center" id="wallPost">
-            <div class="col-lg-5" id="divButtonPost" v-if="user.token!==null">
+        <div id="wallPost">
+            <div class="col-6-lg" id="divButtonPost" v-if="user.token!==null">
                 <p>
                    <button class="btn buttonMain" type="button" data-toggle="collapse" data-target="#formCreatePost" aria-expanded="false" aria-controls="formCreatePost">
                     Que voulez-vous dire, {{ user.username }} ?          
@@ -24,8 +24,8 @@
                     </div>
                 </div>
             </div>        
-            <div class="col-lg-5" id="posts"> 
-                <div v-for="post in allPosts" v-bind:key="post.id" id="test">
+            <div class="col-6-lg" id="posts"> 
+                <div v-for="post in allPosts" v-bind:key="post.id">
                     <div id="containerPosts">
                         <div class="card postBorder ">
                             <div class="card-header textPost">
@@ -221,11 +221,15 @@ export default {
 </script>
 
 <style scoped>
+
 #wallPost{
     margin-top: 6rem;
     width: 100vw;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 
@@ -290,10 +294,18 @@ export default {
 
 #containerPosts{
     margin-top: 0.4rem;
+    width: 45vw;
 }
+
+#posts{
+    margin-top: 1rem;
+}  
 
 @media all and (max-width: 600px){
     #formCreatePost{
+    width: 90vw;
+    }
+    #containerPosts{
     width: 90vw;
     }
 }
@@ -301,6 +313,11 @@ export default {
     #posts{
         margin-top: 1rem;
     }  
+}
 
+@media all and (max-width: 1025px){
+    #containerPosts{
+    width: 60vw;
+    }
 }
 </style>
