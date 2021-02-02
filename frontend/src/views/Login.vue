@@ -2,7 +2,7 @@
     <div>
        <NavbarConnexion />
        <main class="main">
-            <form class="text-center border border-light w-50">
+            <form class="text-center w-50">
                 <p class="h4 mb-4">IDENTIFICATION</p>
                 <input type="email" v-model="dataLogin.email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="E-mail">
                 <input type="password" v-model="dataLogin.password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Mot de passe">

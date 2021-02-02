@@ -1,19 +1,16 @@
 <template>
     <nav class="navbar navbar-expand-lg justify-content-between">
         <img id="navbarLogo" src="../assets/icon-left-font-monochrome-white.svg" alt="Logo"/>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span><i class="fas fa-bars"></i></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <div id="navbarNav">
             <ul class="navbar-nav ">
                 <li class="nav-item active" v-if="user.token!==null">
-                    <router-link class="nav-link routerWhite" to="/wall">Wall</router-link>
+                    <router-link class="nav-link routerBlack" to="/wall"><i class="fas fa-bell fa-lg"></i></router-link>
                 </li>
                  <li class="nav-item active" v-if="user.token!==null">
-                    <router-link class="nav-link routerWhite" to="/profile">Mon compte</router-link>
+                    <router-link class="nav-link routerBlack" to="/profile"><i class="fas fa-user fa-lg"></i></router-link>
                 </li>
                 <li class="nav-item" v-if="user.token!==null">
-                    <router-link class="nav-link routerRed" to="/" @click.prevent="disconnect">Deconnexion</router-link>
+                    <router-link class="nav-link routerRed" to="/" @click.prevent="disconnect"><i class="fas fa-power-off fa-lg"></i></router-link>
                 </li>
                 <li class="nav-item" v-if="user.token==null">
                     <router-link class="nav-link routerRed" to="/">Veuillez vous connecter</router-link>
@@ -45,10 +42,24 @@ export default {
 nav {
     position: fixed;
     z-index: 2;
-    min-height: 80px;
+    min-height: 100px;
     width: 100vw;
     max-width: 100vw;
-    margin-top: -6rem;
+    margin-top: -8rem;
+}
+
+img{
+    margin-left: 10%;
+}
+
+#navbarNav{
+    width: 30%;
+}
+
+.navbar-nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
 }
 
 #navbarLogo {
@@ -59,7 +70,13 @@ nav {
 
 @media all and (max-width: 767px){
     #navbarLogo {
-    width: 130px;
+    width: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    }
+
+    #navbarNav{
+    width: 100%;
     }
 }
 </style>

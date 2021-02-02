@@ -5,7 +5,7 @@
             <div id="navbarContentRight">
                 <ul id="navbarList">
                     <li class="nav-item active">
-                        <router-link class="nav-link routerWhite" to="/">S'identifier</router-link>
+                        <router-link class="nav-link routerBlack" to="/">S'identifier</router-link>
                     </li>
                     <li class="nav-item">
                         <router-link class="nav-link routerRed" to="/signup">S'inscrire</router-link>

@@ -8,16 +8,18 @@ export default createStore({
       email:null,
       username:null,
       description:null,
+      avatar: null,
       token:null,
       isAdmin:null
     }
   },
   mutations: {
-    saveDataUser(state, [id, email, username, description, isAdmin]) {
+    saveDataUser(state, [id, email, username, description, avatar, isAdmin]) {
       state.user.id = id,
       state.user.email = email,
       state.user.username = username,
       state.user.description = description,
+      state.user.avatar = avatar,
       state.user.token = localStorage.getItem('token'),
       state.user.isAdmin = isAdmin
     }
@@ -30,12 +32,10 @@ export default createStore({
         }
       })
         .then(response => {
-          context.commit("saveDataUser", [response.data.id, response.data.email, response.data.username, response.data.description, response.data.isAdmin])
+          context.commit("saveDataUser", [response.data.id, response.data.email, response.data.username, response.data.description, response.data.avatar, response.data.isAdmin])
         })
         .catch(error => console.log(error))
       
     }
   },
-  modules: {
-  }
 })

@@ -2,6 +2,7 @@
 const bcrypt = require('bcrypt'); //Notre système de cryptage
 const jwt = require('jsonwebtoken'); //permet de créer et de vérifier des tokens d'auth
 const models = require('../models');
+const fs = require('fs');
 
 const JWT_CLE_SECRETE = '1azenh44e2r5v8b7n4h5t65dvvvtyu5i1f6cc7cn';
 
@@ -17,14 +18,15 @@ exports.signup = (req, res, next) => {
     var username = req.body.username;
     var password = req.body.password;
     var description = req.body.description;
+    var image;
 
     //L'utitilisateur doit renseigner son email, son username et son password
     if(email == null || username == null || password == null) {
-        return res.status(401).json({ error: 'Email, username ou password manquant' });
+        return res.status(401).json({ error: 'Email, username ou password manquant Ici' });
     }
 
     //L'utilisateur doit choisir un username compris entre 4 et 12 caractères
-    if(username.length >= 13 || username.length <= 3) {
+    if(username.length >= 20 || username.length <= 3) {
         return res.status(401).json({ error: 'Username doit faire entre 4 et 12 caractères' });
     }
 
@@ -41,6 +43,10 @@ exports.signup = (req, res, next) => {
         })
             .then(function(userFound) {
                 if(!userFound) {
+                    if(req.file != undefined) {
+                        image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+                    } else { image == null }
+
                     bcrypt.hash(password, 10) //hashage du mdp, 10 répète l'algorythme de hashage
                     .then(hash => { //On récupère le hash du password et crée un nouvel utilisateur
                         const newUser = new models.User({
@@ -48,6 +54,7 @@ exports.signup = (req, res, next) => {
                             username: username,
                             password: hash,
                             description: description,
+                            avatar: image,
                             isAdmin: 0
                         });
                         newUser.save() //cette méthode enregistre dans la bdd
@@ -115,7 +122,7 @@ exports.getUserProfile = (req, res, next) => {
     const userId = decodedToken.userId; //On récupère l'id de la réponse
 
     models.User.findOne({
-        attributes: ['id','email', 'username', 'description', 'isAdmin'],
+        attributes: ['id','email', 'username', 'description', 'avatar', 'isAdmin'],
         where: { id: userId }
     })
         .then(user => res.status(201).json(user))
@@ -163,24 +170,33 @@ exports.deleteUserProfile = (req, res, next) => {
     })  
         .then((userFound) => {
             if(userFound != null) {
-                console.log(1)
                 models.Like.destroy({
                     where: { userId: userFound.id }
                 })
-                    .then(() => {  
-                        console.log(2)          
+                    .then(() => {       
                         models.Post.destroy({
                             where: { userId: userFound.id }      
                         })
                         .then(() => {
-                            console.log(3)
-                            models.User.destroy({
-                                where: { id: userId }
-                            })
-                            .then(() => res.status(200).json({ message: 'Utilisateur et publications supprimés' }))
-                            .catch(function(){
-                                return res.status(404).json({ error: 'Problème lors de la suppression de l utilisateur' });
-                            })
+                            if (userFound.avatar) {
+                                const filename = userFound.avatar.split('/images/')[1]
+                                fs.unlink(`images/${filename}`, () => {
+                                    models.User.destroy({ 
+                                        where: { id: userId}
+                                    })
+                                        .then(() => res.status(200).json({ message: 'Utilisateur et publications supprimés' }))
+                                        .catch(function (){
+                                        return res.status(404).json({ error: 'Problème lors de la suppression de l utilisateur' });
+                                        })
+                                });
+                            } else {                                 
+                                models.User.destroy({
+                                    where: { id: userId } 
+                                })
+                                .then(() => res.status(200).json({ message: 'Utilisateur et publications supprimés' }))
+                                .catch(function(){                 
+                                })
+                            }
                         })
                     })
                     .catch(function(){

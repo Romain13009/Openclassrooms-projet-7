@@ -10,11 +10,13 @@
   $colorSecondary: #d35059;
   $colorSecondaryHover: #a84249;
   $color3: white;
+  $color4: black;
   
   
   //NAVIGATION
   .navbar{
-    background: $colorMain;
+    background: $color3;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.171);
   }
 
   .routerRed{
@@ -25,23 +27,59 @@
     color: $colorSecondaryHover;
   }
 
-  .routerWhite{
-   color:$color3;
+  .routerBlack{
+   color:$color4;
   }
   
   //BUTTONS
   .buttonMain{
-    background:$colorSecondary;
-    color: $color3
-  }
-
-  .buttonSecondary{
-    background:$colorMain;
-    color: $color3
+    background:none;
+    color: $colorSecondary
   }
 
   .buttonMain:hover{
+      background: $colorSecondary;
+      color: $color3;
+    }
+
+  .buttonSecondary{
+    background:none;
+    color: $colorMain
+  }
+
+  .buttonSecondary:hover{
+    background: $colorMain;
+    color: $color3
+  }
+
+  .buttonCreatePost{
+    background: $colorSecondary;
+    color: $color3;
+  }
+
+  .buttonCreatePost:hover{
     background: $colorSecondaryHover;
+  }
+
+  .buttonEdit{
+    background: none;
+    color: $colorMain;
+    :hover{
+      color: $colorSecondaryHover;
+    }
+  }
+
+  .buttonDelete{
+    background: none;
+    color: $colorSecondary;
+    :hover{
+      color: $colorSecondaryHover;
+    }
+  }
+
+  .buttonEditProfil{
+    background: $colorMain;
+    color: $color3
   }
 
   .navbar-toggler{
@@ -53,15 +91,8 @@
       outline: none;
   }
   //POST
-  .postBorder{
-    border:  1px solid $colorMain;
-  }
-
   .textPost{
     color: $colorMain;
   }
 
-  .card-footer{
-    border-top:  1px solid $colorMain;
-  }
 </style>
