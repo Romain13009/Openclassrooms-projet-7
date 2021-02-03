@@ -13,6 +13,12 @@
                   class="avatarProfile"
                   v-if="user.avatar"
                 />
+                <img
+                  src="http://localhost:3000/images/avatar_default.png"
+                  alt="avatar de l'utilisateur"
+                  class="avatarProfile"
+                  v-else
+                />
               </div>
               <h4>{{ user.username }}</h4>
             </div>

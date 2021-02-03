@@ -25,6 +25,7 @@
                   v-model="dataCreatePost.content"
                   class="form-control"
                   id="formContentPost"
+                  minlength="1"
                   maxlength="150"
                   rows="3"
                   placeholder="150 caractères maximum"
@@ -54,7 +55,7 @@
         </div>
       </div>
       <div class="col-6-lg" id="posts">
-        <div v-for="post in allPosts" v-bind:key="post.id">
+        <div v-for="post in allPosts" :key="post.id">
           <div id="containerPosts">
             <div class="card postBorder">
               <div class="card-header textPost">
@@ -67,12 +68,24 @@
                         class="avatarPost"
                         v-if="post.avatar"
                       />
+                      <img
+                        src="http://localhost:3000/images/avatar_default.png"
+                        alt="avatar de l'utilisateur"
+                        class="avatarPost"
+                        v-else
+                      />
                     </div>
                     <div class="infoPost">
                       <p class="UsernamePost">{{ post.username }}</p>
                       <p class="datePost">
-                        le {{ post.createdAt.split("T")[0] }} à
-                        {{ post.createdAt.split("T").pop().split(".000Z")[0] }}
+                        {{ 
+                          moment(post.createdAt)
+                          .locale("fr")
+                          .format('LL à HH:mm')
+                        }}
+                        <!-- {{moment(String(post.createdAt)).format('MM/DD/YYYY hh:mm')}} -->
+                        <!-- le {{ post.createdAt.split("T")[0] }} à
+                        {{ post.createdAt.split("T").pop().split(".000Z")[0] }} -->
                       </p>
                     </div>
                   </div>
@@ -90,6 +103,7 @@
                 />
               </div>
               <div class="card-footer">
+                <div id="footerBorderLine"></div>
                 <div id="footerPost">
                   <div class="divLike">
                     <button
@@ -102,88 +116,101 @@
                     </button>
                     <p>{{ post.likes }}</p>
                   </div>
-                  <div
-                    id="footerPostButton"
-                    v-if="
-                      user.isAdmin == true || user.username == post.username
-                    "
-                  >
-                    <button
-                      type="button"
-                      @click.prevent="ModifPostId"
-                      class="btn buttonEdit btn-sm"
-                      data-toggle="modal"
-                      data-target="#exampleModal"
-                      :id="post.id"
-                    >
-                      <i class="fas fa-edit fa-lg"></i>
-                    </button>
+                  <div id="footerPostButton">
                     <div
-                      class="modal fade"
-                      id="exampleModal"
-                      tabindex="-1"
-                      role="dialog"
-                      aria-labelledby="exampleModalLabel"
-                      aria-hidden="true"
+                      id="footerPostButtonRight"
+                      v-if="
+                        user.isAdmin == true || user.username == post.username
+                      "
                     >
-                      <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">
-                              Modifiez votre message ici
-                            </h5>
-                            <button
-                              type="button"
-                              class="close"
-                              data-dismiss="modal"
-                              aria-label="Close"
-                            >
-                              <span aria-hidden="true">&times;</span>
-                            </button>
-                          </div>
-                          <div class="modal-body">
-                            <label for="formContentModif"
-                              >Écrivez votre texte ici !</label
-                            >
-                            <textarea
-                              v-model="dataModifPost.content"
-                              class="form-control"
-                              id="formContentModif"
-                              maxlength="150"
-                              rows="3"
-                              placeholder="150 caractères maximum"
-                            ></textarea>
-                          </div>
-                          <div class="modal-footer">
-                            <button
-                              type="button"
-                              class="btn btn-secondary"
-                              data-dismiss="modal"
-                            >
-                              Annuler
-                            </button>
-                            <button
-                              type="button"
-                              @click.prevent="ModifPost"
-                              :id="post.id"
-                              class="btn buttonMain"
-                            >
-                              Modifier
-                            </button>
+                      <button
+                        type="button"
+                        @click.prevent="ModifPostId"
+                        class="btn buttonEdit btn-sm"
+                        data-toggle="modal"
+                        data-target="#exampleModal"
+                        :id="post.id"
+                      >
+                        <i class="fas fa-edit fa-lg" :id="post.id"></i>
+                      </button>
+                      <div
+                        class="modal fade"
+                        id="exampleModal"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="exampleModalLabel"
+                        aria-hidden="true"
+                      >
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">
+                                Modifiez votre message ici
+                              </h5>
+                              <button
+                                type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                              >
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <label for="formContentModif"
+                                >Écrivez votre texte ici !</label
+                              >
+                              <textarea
+                                v-model="dataModifPost.content"
+                                class="form-control"
+                                id="formContentModif"
+                                maxlength="150"
+                                rows="3"
+                                placeholder="150 caractères maximum"
+                              ></textarea>
+                            </div>
+                            <div class="modal-footer">
+                              <button
+                                type="button"
+                                class="btn btn-secondary"
+                                data-dismiss="modal"
+                              >
+                                Annuler
+                              </button>
+                              <button
+                                type="button"
+                                @click.prevent="ModifPost"
+                                :id="post.id"
+                                class="btn buttonMain"
+                              >
+                                Modifier
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
+                      <button
+                        type="button"
+                        @click.prevent="deletePost"
+                        :id="post.id"
+                        class="btn buttonDelete btn-sm"
+                      >
+                        <i class="fas fa-trash-alt fa-lg" :id="post.id"></i>
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      @click.prevent="deletePost"
-                      :id="post.id"
-                      class="btn buttonDelete btn-sm"
-                    >
-                      <i class="fas fa-trash-alt fa-lg"></i>
-                    </button>
                   </div>
                 </div>
+                <textarea
+                  class="form-control formContentComment"
+                  :id="post.id"
+                  v-model="dataCreateComment.content[post.id]"
+                  maxlength="150"
+                  rows="2"
+                  placeholder="Donnez votre avis ici..."
+                  @keyup.enter.exact="commentPost"
+                  @keydown.enter.exact.prevent
+                ></textarea>
+                <!-- <CreateComment/> -->
               </div>
             </div>
           </div>
@@ -194,7 +221,9 @@
 </template>
 
 <script>
+import moment from 'moment'
 import NavbarMain from "@/components/NavbarMain.vue";
+// import CreateComment from "@/components/CreateComment.vue";
 import axios from "axios";
 import { mapState } from "vuex";
 
@@ -202,9 +231,11 @@ export default {
   name: "Wall",
   components: {
     NavbarMain,
+    // CreateComment
   },
   data() {
     return {
+      moment: moment,
       allPosts: [],
       dataCreatePost: {
         content: null,
@@ -215,6 +246,10 @@ export default {
         id: null,
       },
       like: {
+        id: null,
+      },
+      dataCreateComment: {
+        content: [],
         id: null,
       },
     };
@@ -324,6 +359,36 @@ export default {
         alert("ERREUR ! Publication introuvable.");
       }
     },
+    commentPost() {
+      console.log(event.target.id); //id Post
+      this.dataCreateComment.id = event.target.id;
+      console.log(this.dataCreateComment.content[event.target.id]); //contenu du commentaire
+
+      const fd = new FormData();
+      fd.append("id", event.target.id);
+      fd.append("content", this.dataCreateComment.content[event.target.id]);
+
+      if (this.dataCreateComment.content[event.target.id] != undefined) {
+        axios
+          .post("http://localhost:3000/api/wall/posts/comment", fd, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+          })
+          .then((response) => {
+            if (response) {
+              window.location.reload();
+            }
+          })
+          .catch(() => {
+            alert("ERREUR ! Une erreur est survenue.");
+          });
+      } else {
+        alert(
+          "ERREUR ! Echec, assurez vous que votre commentaire ne soit pas vide."
+        );
+      }
+    },
   },
   mounted() {
     this.$store.dispatch("getDataUser");
@@ -354,6 +419,10 @@ export default {
   align-items: center;
 }
 
+.card-header {
+  border-bottom: none;
+}
+
 #headerPost {
   display: flex;
   flex-direction: row;
@@ -371,7 +440,7 @@ export default {
   min-width: 100%;
 }
 
-.infoPost{
+.infoPost {
   display: flex;
   align-items: flex-start;
   flex-direction: column;
@@ -386,7 +455,7 @@ export default {
   padding: 0;
 }
 
-.datePost{
+.datePost {
   margin: 0;
   padding: 0;
 }
@@ -412,6 +481,15 @@ export default {
   max-width: 100%;
 }
 
+.card-footer {
+  border: none;
+}
+
+#footerBorderLine {
+  border-top: 1px solid rgba(0, 0, 0, 0.459);
+  margin-bottom: 1rem;
+}
+
 #footerPost {
   display: flex;
   flex-direction: row;
@@ -421,11 +499,16 @@ export default {
 }
 
 #footerPostButton {
-  width: 15%;
   height: 2rem;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+#footerPostButtonRight {
+  display: flex;
+  flex-direction: row;
 }
 
 #divButtonPost {
@@ -434,6 +517,12 @@ export default {
   flex-direction: column;
   align-items: center;
   margin-bottom: -2rem;
+}
+
+.formContentComment {
+  background: rgba(0, 0, 0, 0.04);
+  border: none;
+  margin-top: 1rem;
 }
 
 #formCreatePost {
@@ -462,6 +551,7 @@ export default {
 
 .buttonLike {
   color: rgb(0, 206, 69);
+  border: none;
 }
 
 #containerPosts {
@@ -483,18 +573,18 @@ export default {
   }
   #footerPostButton {
     min-width: 30%;
-  }  
+  }
 }
 @media all and (max-width: 992px) {
   #posts {
     margin-top: 1rem;
   }
-  .infoPost{
-  margin-left: 5%;
+  .infoPost {
+    margin-left: 5%;
   }
   #footerPostButton {
-  width: 20%;
-  }  
+    width: 20%;
+  }
 }
 
 @media all and (max-width: 1025px) {

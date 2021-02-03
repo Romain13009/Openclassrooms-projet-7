@@ -61,7 +61,7 @@
     background: $colorSecondaryHover;
   }
 
-  .buttonEdit{
+  .buttonEdit, .buttonDelete{
     background: none;
     color: $colorMain;
     :hover{
@@ -69,13 +69,6 @@
     }
   }
 
-  .buttonDelete{
-    background: none;
-    color: $colorSecondary;
-    :hover{
-      color: $colorSecondaryHover;
-    }
-  }
 
   .buttonEditProfil{
     background: $colorMain;
@@ -84,7 +77,7 @@
 
   .navbar-toggler{
     i{
-      color: white;
+      color: $color3;
     }
   }
     .navbar-toggler:focus{
@@ -93,6 +86,10 @@
   //POST
   .textPost{
     color: $colorMain;
+  }
+
+  .card-header, .card-footer{
+    background: $color3;
   }
 
 </style>

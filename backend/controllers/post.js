@@ -111,34 +111,44 @@ exports.deletePost = (req, res, next) => {
                         postId: idPost
                     }
                 })
-                .then(() => {
-                    if ( userFound.isAdmin == true || userFound.id == postFound.UserId ) {
-                        if (postFound.image) {
-                            const filename = postFound.image.split('/images/')[1]
-                            fs.unlink(`images/${filename}`, () => {
-                                models.Post.destroy({ 
-                                    where: { id: idPost}
+                .then(()=>{
+                    models.Comment.destroy({
+                        where: {
+                            postId: idPost
+                        }
+                    })
+                    .then(() => {
+                        if ( userFound.isAdmin == true || userFound.id == postFound.UserId ) {
+                            if (postFound.image) {
+                                const filename = postFound.image.split('/images/')[1]
+                                fs.unlink(`images/${filename}`, () => {
+                                    models.Post.destroy({ 
+                                        where: { id: idPost}
+                                    })
+                                        .then(() => res.status(200).json({ message: 'Publication et image supprimées' }))
+                                        .catch(error => res.status(400).json({ error }));
+                                });
+                            } else {
+                                models.Post.destroy({
+                                where: { id: idPost }
                                 })
-                                    .then(() => res.status(200).json({ message: 'Publication et image supprimées' }))
+                                    .then(() => res.status(200).json({ message: 'Publication supprimée' }))
                                     .catch(error => res.status(400).json({ error }));
-                            });
+                            } 
                         } else {
-                            models.Post.destroy({
-                            where: { id: idPost }
-                            })
-                                .then(() => res.status(200).json({ message: 'Publication supprimée' }))
-                                .catch(error => res.status(400).json({ error }));
-                        } 
-                    } else {
-                        return res.status(500).json({ error: 'action non autorisée' });
-                    }
+                            return res.status(500).json({ error: 'action non autorisée' });
+                        }
+                    })
+                    .catch(function(){
+                        return res.status(404).json({ error: 'Utilisateur introuvable ou action non autorisée' });
+                    })
                 })
                 .catch(function(){
-                    return res.status(404).json({ error: 'Utilisateur introuvable ou action non autorisée' });
+                    return res.status(404).json({ error: 'Problème base de données Comment' });
                 })
             })
             .catch(function(){
-                return res.status(404).json({ error: 'Problème base de données' });
+                return res.status(404).json({ error: 'Problème base de données Like' });
             })
         }) 
         .catch(function(){
@@ -174,17 +184,28 @@ exports.updatePost = (req, res, next) => {
                             image = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
                             const filename = postFound.image.split('/images/')[1]
                             fs.unlink(`images/${filename}`, () => {
-                                postFound.update({ 
-                                    content: (content ? content: post.found.content),
-                                    image: image
-                                })
-                                    .then(() => res.status(200).json({ message: 'Publication et image modifiées' }))
-                                    .catch(error => res.status(400).json({ error }));
+                                // postFound.update({ 
+                                //     content: (content ? content: postFound.content),
+                                //     image: image })
+                                models.Post.update(
+                                    {
+                                        content: (content ? content: commentFound.content),
+                                        image: image
+                                    },
+                                    {where: { id: idPost }} 
+                                )   .then(() => res.status(200).json({ message: 'Publication et image modifiées' }))
+                                    .catch(error => res.status(400).json({ error }));                         
                             });
                         } else {
-                            postFound.update({
-                                    content: (content ? content: post.found.content)    
-                                })
+                            // postFound.update({
+                            //         content: (content ? content: postFound.content)    
+                            //     })
+                            models.Post.update(
+                                {
+                                    content: (content ? content: commentFound.content),
+                                },
+                                {where: { id: idPost }} 
+                            )
                                 .then(() => res.status(200).json({ message: 'Publication modifiée' }))
                                 .catch(error => res.status(400).json({ error }));
                         }
