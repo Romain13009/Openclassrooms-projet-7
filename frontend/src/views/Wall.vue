@@ -83,9 +83,6 @@
                           .locale("fr")
                           .format('LL à HH:mm')
                         }}
-                        <!-- {{moment(String(post.createdAt)).format('MM/DD/YYYY hh:mm')}} -->
-                        <!-- le {{ post.createdAt.split("T")[0] }} à
-                        {{ post.createdAt.split("T").pop().split(".000Z")[0] }} -->
                       </p>
                     </div>
                   </div>
@@ -210,7 +207,7 @@
                   @keyup.enter.exact="commentPost"
                   @keydown.enter.exact.prevent
                 ></textarea>
-                <!-- <CreateComment/> -->
+                <Comment :post="post.id" :user="user.id" :isAdmin="user.isAdmin"/>
               </div>
             </div>
           </div>
@@ -223,15 +220,14 @@
 <script>
 import moment from 'moment'
 import NavbarMain from "@/components/NavbarMain.vue";
-// import CreateComment from "@/components/CreateComment.vue";
+import Comment from "@/components/Comment.vue";
 import axios from "axios";
 import { mapState } from "vuex";
 
 export default {
   name: "Wall",
   components: {
-    NavbarMain,
-    // CreateComment
+    NavbarMain, Comment
   },
   data() {
     return {
@@ -252,6 +248,7 @@ export default {
         content: [],
         id: null,
       },
+      dataShowComments:[],
     };
   },
   computed: {
@@ -360,8 +357,7 @@ export default {
       }
     },
     commentPost() {
-      console.log(event.target.id); //id Post
-      this.dataCreateComment.id = event.target.id;
+      this.dataCreateComment.id = event.target.id; //id Post
       console.log(this.dataCreateComment.content[event.target.id]); //contenu du commentaire
 
       const fd = new FormData();
@@ -389,6 +385,23 @@ export default {
         );
       }
     },
+    showPost(){  
+      axios
+        .get("http://localhost:3000/api/wall/posts/getcomment",{
+           headers: {
+              Authorization: "Bearer " + localStorage.getItem("token"),
+            },
+            params:{
+              id: event.target.id
+            }
+        })
+        .then((response)=> {
+          this.dataShowComments = response.data
+        })
+        .catch(() => {
+            alert("ERREUR ! Une erreur est survenueee.");
+        });
+    }
   },
   mounted() {
     this.$store.dispatch("getDataUser");
@@ -399,16 +412,18 @@ export default {
         },
       })
       .then((response) => {
-        this.allPosts = response.data;
+          this.allPosts = response.data;
+          console.log(this.allPosts)
       })
       .catch(() => {
-        alert("ERREUR ! Une erreur est survenue.");
+        console.log('Aucune publication trouvée dans la base de donnée !')
       });
   },
 };
 </script>
 
 <style scoped>
+/* TEMPLATE **********************************************************************************************************/
 #wallPost {
   margin-top: 8rem;
   width: 100vw;
@@ -419,6 +434,7 @@ export default {
   align-items: center;
 }
 
+/* POST **********************************************************************************************************/
 .card-header {
   border-bottom: none;
 }
@@ -525,14 +541,7 @@ export default {
   margin-top: 1rem;
 }
 
-#formCreatePost {
-  width: 25rem;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.171);
-}
 
-#buttonNewPost {
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.171);
-}
 #buttonFormCreatePost {
   margin-top: 1rem;
 }
@@ -564,6 +573,15 @@ export default {
   margin-top: 1rem;
 }
 
+/* CREATE POST **********************************************************************************************************/
+#formCreatePost {
+  width: 25rem;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.171);
+}
+
+#buttonNewPost {
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.171);
+}
 @media all and (max-width: 600px) {
   #formCreatePost {
     width: 90vw;

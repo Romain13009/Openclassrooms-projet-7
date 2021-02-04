@@ -68,10 +68,10 @@ exports.showPost = (req, res, next) => {
     models.Post.findAll({
         attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
         order: [['CreatedAt', 'DESC']],
-        include: [{
-            model: models.User,
-            attributes : ['username']
-        }],
+        // include: [{
+        //     model: models.User,
+        //     attributes : ['username']
+        // }],
         limit: 10
     })
         .then(function(posts) {
@@ -392,19 +392,19 @@ exports.commentPost = (req, res, next) => {
 
 //AFFICHER LES COMMENTAIRES D'UN POST
 exports.getComment = (req, res, next) => {
-    var postId = req.body.id;
+    var postId = req.query.id;
     var fields = req.query.fields;
 
     models.Comment.findAll({
         where: { postId: postId },
-        attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
-        order: [['CreatedAt', 'DESC']],
+        // attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
+        attributes:['id','postId', 'content', 'userId', 'username', 'avatar', 'createdAt', 'updatedAt'],
+        order: [['CreatedAt', 'ASC']],
+
         limit: 10
     })
         .then(function(comments) {
-            console.log(1)
             if (comments.length > null) {
-                console.log(2)
                 res.status(201).json(comments)
             } else {
                 return res.status(404).json({ error: 'Aucun commentaire' });
