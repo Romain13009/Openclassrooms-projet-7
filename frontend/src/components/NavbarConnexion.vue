@@ -1,14 +1,14 @@
 <template>
     <nav class="navbar navbar-expand-lg" style="bgNavbar">
         <div id="navbarContent">
-            <img id="navbarLogo" src="../assets/icon-left-font-monochrome-white.svg" alt="Logo"/>
+            <img id="navbarLogo" src="../assets/icon-left-font-monochrome-white.svg" alt="Logo Groupomania"/>
             <div id="navbarContentRight">
                 <ul id="navbarList">
                     <li class="nav-item active">
-                        <router-link class="nav-link routerBlack" to="/">S'identifier</router-link>
+                        <router-link class="nav-link routerBlack" to="/" aria-labelledby="Connexion">S'identifier</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link routerRed" to="/signup">S'inscrire</router-link>
+                        <router-link class="nav-link routerRed" to="/signup" aria-labelledby="Inscription">S'inscrire</router-link>
                     </li>
                 </ul>
             </div>

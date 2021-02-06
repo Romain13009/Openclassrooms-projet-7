@@ -1,7 +1,7 @@
 const express = require('express'); //on importe le framework express
 const bodyParser = require('body-parser'); //on importe body-parser pour transformer le corps en json
 const path = require('path');
-//const helmet = require('helmet'); //sécurise les headers HTTP
+const helmet = require('helmet'); //sécurise les headers HTTP
 
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-//app.use(helmet());
+app.use(helmet());
 
 app.use('/api/auth', userRoutes); //pour la routes auth on utilise le router userRoutes
 app.use('/api/wall', postRoutes); //pour cette route on utilise le router postsRoutes

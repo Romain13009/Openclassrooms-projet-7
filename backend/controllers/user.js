@@ -171,16 +171,17 @@ exports.deleteUserProfile = (req, res, next) => {
     })
         .then((userFound) => {
             if (userFound != null) {
+                console.log(userFound.id)
                 models.Like.destroy({
                     where: { userId: userFound.id }
                 })
                     .then(() => {
                         if (userFound != null) {
-                            models.Like.destroy({
+                            models.Comment.destroy({
                                 where: { userId: userFound.id }
                             })
                                 .then(() => {
-                                    models.Comment.destroy({
+                                    models.Post.destroy({
                                         where: { userId: userFound.id }
                                     })
                                         .then(() => {
@@ -192,7 +193,7 @@ exports.deleteUserProfile = (req, res, next) => {
                                                     })
                                                         .then(() => res.status(200).json({ message: 'Utilisateur et publications supprimés' }))
                                                         .catch(function () {
-                                                            return res.status(404).json({ error: 'Problème lors de la suppression de l utilisateur' });
+                                                            return res.status(404).json({ error: 'Problème lors de la suppression de l utilisateur ici' });
                                                         })
                                                 });
                                             } else {
@@ -204,11 +205,11 @@ exports.deleteUserProfile = (req, res, next) => {
                                                     })
                                             }
                                         })
-                                    .catch(function () {
-                                        return res.status(404).json({ error: 'Destruction dans la table Comment impossible' });
-                                    })
+                                        .catch(function () {
+                                            return res.status(404).json({ error: 'Destruction dans la table Comment impossible' });
+                                        })
                                 })
-                                
+
                         } else {
                             return res.status(404).json({ error: 'Utilisateur introuvable' });
                         }

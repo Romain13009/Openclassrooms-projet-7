@@ -22,7 +22,7 @@
               </div>
               <h4>{{ user.username }}</h4>
             </div>
-            <p class="mt-2 card-text">{{ user.description }}</p>
+            <p class="mt-2 card-text" v-if="user.description != 'null'">{{ user.description }}</p>
             <div class="border-top pt-3">
               <div class="row">
                 <div class="col-lg-6">
@@ -40,6 +40,7 @@
                       data-target="#formCreatePost"
                       aria-expanded="false"
                       aria-controls="formCreatePost"
+                      aria-labelledby="modifiez votre description"
                     >
                       Cliquez ici !
                     </button>
@@ -58,6 +59,7 @@
                             maxlength="150"
                             rows="3"
                             placeholder="150 caractères maximum"
+                            aria-labelledby="modifiez votre description ici"
                           ></textarea>
                         </div>
                         <button
@@ -65,6 +67,7 @@
                           class="btn buttonMain"
                           id="buttonFormCreatePost"
                           @click.prevent="modifDescription"
+                          aria-labelledby="Validez la modification"
                         >
                           Sauvegardez vos modification
                         </button>
@@ -86,6 +89,7 @@
                     type="button"
                     class="btn buttonDelete buttonModif"
                     @click.prevent="deleteUser"
+                    aria-labelledby="Supprimez votre compte, attention action irréversible"
                   >
                     <i class="fas fa-skull-crossbones fa-2x"></i>
                   </button>

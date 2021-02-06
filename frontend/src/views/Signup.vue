@@ -8,50 +8,56 @@
           type="Name"
           v-model="dataSignup.username"
           id="defaultSignupFormName"
-          class="form-control mb-4"
+          class="form-control"
           placeholder="Username (12 caractères maximum)"
           required
-        />
+          aria-labelledby="Écrire votre prénom">
+          <p class="information">Votre Prénom</p>
         <input
           type="email"
           v-model="dataSignup.email"
           id="defaultSignupFormEmail"
-          class="form-control mb-4"
+          class="form-control"
           placeholder="E-mail"
           required
-        />
+          aria-labelledby="Écrire votre mail">
+          <p class="information">Votre adresse email</p>
         <input
           type="password"
           v-model="dataSignup.password"
           id="defaultSignupFormPassword"
-          class="form-control mb-4"
+          class="form-control"
           placeholder="Mot de passe"
           required
-        />
+          aria-labelledby="Écrire votre mot de passe">
+          <p class="information">Votre mot de passe</p>
         <input
           type="text"
           v-model="dataSignup.description"
           id="defaultSignupFormDescription"
-          class="form-control mb-4"
-          placeholder="Description (optionnelle)"
-        />
-        <div class="custom-file"> <!--AVATAR-->
+          class="form-control"
+          placeholder="Description (optionnel)"
+          aria-labelledby="Écrire votre description (optionnel)">
+          <p class="information">Votre description (optionnel)</p>
+        <div class="custom-file"> AVATAR
           <input
             type="file"
             @change="onFileSelected"
             class="custom-file-input"
             id="formImagePost"
-          />
+            aria-labelledby="Choisissez une image (optionel)">  
           <label class="custom-file-label" for="formImagePost"
-            ><p>Avatar</p></label
+            >Avatar</label
           >
+          
         </div>
+        <p class="information" id="informationAvatar">Votre avatar (optionnel)</p>
         <button
           class="btn buttonMain btn-block my-1"
           type="submit"
           @click.prevent="signupSend"
           id="inscriptionButton"
-        >
+          aria-labelledby="S'inscrire">
           Inscription
         </button>
       </form>
@@ -180,5 +186,9 @@ label{
 
 #inscriptionButton{
   margin-top: 1.5rem;
+}
+
+#informationAvatar{
+  margin-top: -12px;
 }
 </style>

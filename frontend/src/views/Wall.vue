@@ -10,9 +10,7 @@
             type="button"
             data-toggle="collapse"
             data-target="#formCreatePost"
-            aria-expanded="false"
-            aria-controls="formCreatePost"
-          >
+            aria-label="Cliquez ici pour créer une publication">
             Que voulez-vous dire, {{ user.username }} ?
           </button>
         </p>
@@ -29,7 +27,8 @@
                   maxlength="150"
                   rows="3"
                   placeholder="150 caractères maximum"
-                ></textarea>
+                  aria-labelledby="Rédigez votre publication ici">
+                </textarea>
               </div>
               <div class="custom-file">
                 <input
@@ -47,7 +46,7 @@
                 @click.prevent="createPost"
                 class="btn buttonMain"
                 id="buttonFormCreatePost"
-              >
+                aria-labelledby="Cliquez pour publier votre publication">
                 Publier
               </button>
             </form>
@@ -108,8 +107,9 @@
                       @click.prevent="addLike"
                       type="button"
                       :id="post.id"
+                      aria-label="Aimez cette publication"
                     >
-                      <i class="fas fa-thumbs-up" :id="post.id"></i>
+                      <i class="fas fa-thumbs-up" :id="post.id" alt="Like"></i>
                     </button>
                     <p>{{ post.likes }}</p>
                   </div>
@@ -127,6 +127,7 @@
                         data-toggle="modal"
                         data-target="#exampleModal"
                         :id="post.id"
+                        aria-label="Modifiez cette publication"
                       >
                         <i class="fas fa-edit fa-lg" :id="post.id"></i>
                       </button>
@@ -141,7 +142,7 @@
                         <div class="modal-dialog" role="document">
                           <div class="modal-content">
                             <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">
+                              <h5 class="modal-title">
                                 Modifiez votre message ici
                               </h5>
                               <button
@@ -149,6 +150,7 @@
                                 class="close"
                                 data-dismiss="modal"
                                 aria-label="Close"
+                                aria-labelledby="Fermez la fenêtre"
                               >
                                 <span aria-hidden="true">&times;</span>
                               </button>
@@ -164,6 +166,7 @@
                                 maxlength="150"
                                 rows="3"
                                 placeholder="150 caractères maximum"
+                                aria-labelledby="Modifiez cette publication"
                               ></textarea>
                             </div>
                             <div class="modal-footer">
@@ -171,6 +174,7 @@
                                 type="button"
                                 class="btn btn-secondary"
                                 data-dismiss="modal"
+                                aria-labelledby="Fermez la fenêtre"
                               >
                                 Annuler
                               </button>
@@ -179,6 +183,7 @@
                                 @click.prevent="ModifPost"
                                 :id="post.id"
                                 class="btn buttonMain"
+                                aria-labelledby="Validez les modifications"
                               >
                                 Modifier
                               </button>
@@ -191,6 +196,7 @@
                         @click.prevent="deletePost"
                         :id="post.id"
                         class="btn buttonDelete btn-sm"
+                        aria-label="Supprimez cette publication"
                       >
                         <i class="fas fa-trash-alt fa-lg" :id="post.id"></i>
                       </button>
@@ -206,8 +212,9 @@
                   placeholder="Donnez votre avis ici..."
                   @keyup.enter.exact="commentPost"
                   @keydown.enter.exact.prevent
+                  aria-label="Commentez cette publication"
                 ></textarea>
-                <Comment :post="post.id" :user="user.id" :isAdmin="user.isAdmin"/>
+                <CommentsList :post="post.id" :user="user.id" :isAdmin="user.isAdmin"/>
               </div>
             </div>
           </div>
@@ -220,14 +227,20 @@
 <script>
 import moment from 'moment'
 import NavbarMain from "@/components/NavbarMain.vue";
-import Comment from "@/components/Comment.vue";
+// import Comment from "@/components/Comment.vue";
+// import AllComment from "@/components/AllComment.vue";
+import CommentsList from "@/components/CommentsList.vue";
 import axios from "axios";
 import { mapState } from "vuex";
+
 
 export default {
   name: "Wall",
   components: {
-    NavbarMain, Comment
+    NavbarMain, 
+    // Comment,
+    // AllComment,
+    CommentsList
   },
   data() {
     return {
@@ -249,6 +262,10 @@ export default {
         id: null,
       },
       dataShowComments:[],
+      isDisplay: {
+        id: false,
+        default:false
+      },
     };
   },
   computed: {
@@ -338,6 +355,7 @@ export default {
     addLike(event) {
       if (event.target.id !== null) {
         this.like.id = event.target.id;
+        console.log(this.like.id)
         axios
           .post("http://localhost:3000/api/wall/posts/like", this.like, {
             headers: {
@@ -401,6 +419,14 @@ export default {
         .catch(() => {
             alert("ERREUR ! Une erreur est survenueee.");
         });
+    },
+    showAllComments(id){
+      this.isDisplay.id = 'show'+id;
+      console.log(this.isDisplay.id)
+    },
+    hideAllComments(id){
+      this.isDisplay.id = 'hide'+id;
+      console.log(this.isDisplay.id)
     }
   },
   mounted() {
@@ -413,7 +439,6 @@ export default {
       })
       .then((response) => {
           this.allPosts = response.data;
-          console.log(this.allPosts)
       })
       .catch(() => {
         console.log('Aucune publication trouvée dans la base de donnée !')
@@ -572,6 +597,7 @@ export default {
 #posts {
   margin-top: 1rem;
 }
+
 
 /* CREATE POST **********************************************************************************************************/
 #formCreatePost {

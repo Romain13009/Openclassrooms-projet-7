@@ -40,7 +40,6 @@
             data-toggle="modal"
             data-target="#ModalComment"
             :id="comment.id"
-            aria-label="modifiez le commentaire"
           >
             <i class="fas fa-edit fa-lg" :id="comment.id"></i>
           </button>
@@ -63,11 +62,10 @@
                   <textarea
                     v-model="dataModifComment.content"
                     class="form-control"
-                    id="formContentModifComment"
+                    id="formContentModif"
                     maxlength="150"
                     rows="3"
                     placeholder="150 caractères maximum"
-                    aria-labelledby="Validez la modification du commentaire"
                   ></textarea>
                 </div>
                 <div class="modal-footer">
@@ -75,7 +73,6 @@
                     type="button"
                     class="btn btn-secondary"
                     data-dismiss="modal"
-                    aria-label="Fermez la fenêtre"
                   >
                     Annuler
                   </button>
@@ -84,7 +81,6 @@
                     @click.prevent="ModifComment"
                     :id="comment.id"
                     class="btn buttonMain"
-                    aria-labelledby="Validez la modification"
                   >
                     Modifier
                   </button>
@@ -97,7 +93,6 @@
             @click.prevent="deleteComment"
             :id="comment.id"
             class="btn buttonDelete btn-sm"
-            aria-label="Supprimez ce commentaire"
           >
             <i class="fas fa-trash-alt fa-lg" :id="comment.id"></i>
           </button>
@@ -115,7 +110,7 @@ import axios from "axios";
 import moment from "moment";
 
 export default {
-  name: "Comment",
+  name: "AllComment",
   props: ["post", "user", "isAdmin"],
   data() {
     return {
@@ -186,7 +181,7 @@ export default {
   mounted() {
     if (this.post != undefined) {
     axios
-      .get("http://localhost:3000/api/wall/posts/getOnecomment", {
+      .get("http://localhost:3000/api/wall/posts/getcomment", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
@@ -222,7 +217,7 @@ export default {
 .comment {
   display: flex;
   flex-direction: row;
-  margin-top: -8px;
+  margin-top: -5px;
   justify-content: space-between;
 }
 
@@ -279,11 +274,16 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 15%;
+  width: 25%;
   justify-content: flex-end;
 }
 
 button {
   width: 100%;
+}
+
+/*Modal*****************************************************/
+.modal {
+  /* width: 80vw; */
 }
 </style>
