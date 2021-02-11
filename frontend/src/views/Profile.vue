@@ -26,11 +26,11 @@
             <div class="border-top pt-3">
               <div class="row">
                 <div class="col-lg-6">
-                  <h6>E-mail:</h6>
+                  <h2>E-mail:</h2>
                   <p>{{ user.email }}</p>
                 </div>
                 <div class="col-lg-6">
-                  <h6>Modifiez votre description:</h6>
+                  <h2>Modifiez votre description:</h2>
                   <!-- Button trigger modal -->
                   <p>
                     <button
@@ -40,7 +40,7 @@
                       data-target="#formCreatePost"
                       aria-expanded="false"
                       aria-controls="formCreatePost"
-                      aria-labelledby="modifiez votre description"
+                      aria-label="modifiez votre description"
                     >
                       Cliquez ici !
                     </button>
@@ -59,7 +59,7 @@
                             maxlength="150"
                             rows="3"
                             placeholder="150 caractères maximum"
-                            aria-labelledby="modifiez votre description ici"
+                            aria-label="modifiez votre description ici"
                           ></textarea>
                         </div>
                         <button
@@ -80,16 +80,16 @@
             <div class="border-top pt-3" id="blockModif2">
               <div class="row">
                 <div class="col-12">
-                  <h6>Supprimez votre compte:</h6>
-                  <h6>
+                  <h2>Supprimez votre compte:</h2>
+                  <h2>
                     (Attention, cette action est irréversible et entraînera une
                     suppression des publications !)
-                  </h6>
+                  </h2>
                   <button
                     type="button"
                     class="btn buttonDelete buttonModif"
                     @click.prevent="deleteUser"
-                    aria-labelledby="Supprimez votre compte, attention action irréversible"
+                    aria-label="Supprimez votre compte, attention action irréversible"
                   >
                     <i class="fas fa-skull-crossbones fa-2x"></i>
                   </button>
@@ -189,7 +189,7 @@ export default {
   width: 80vw;
 }
 
-h6 {
+h2 {
   font-size: 1rem;
 }
 

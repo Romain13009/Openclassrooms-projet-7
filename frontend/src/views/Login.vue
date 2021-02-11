@@ -11,7 +11,7 @@
           id="defaultLoginFormEmail"
           class="form-control"
           placeholder="E-mail"
-          aria-labelledby="Écrire votre Email"
+          aria-label="Écrire votre Email"
         />
         <p class="information">
           L'adresse mail avec laquelle vous vous êtes inscrit
@@ -23,7 +23,7 @@
           id="defaultLoginFormPassword"
           class="form-control"
           placeholder="Mot de passe"
-          aria-labelledby="Écrire votre mot de passe"
+          aria-label="Écrire votre mot de passe"
         />
         <p class="information">Mot de passe avec lequel vous vous êtes inscrit</p>
 
@@ -32,14 +32,14 @@
           class="btn btn-block my-1 buttonMain"
           type="submit"
           @click.prevent="loginSend"
-          aria-labelledby="Se connecter"
+          aria-label="Se connecter"
         >
           Connexion
         </button>
         <router-link
           class="nav-link routerBlack"
           to="/signup"
-          aria-labelledby=" Page Inscription"
+          aria-label=" Page Inscription"
           >Pas encore inscrit ? Cliquez ici !</router-link
         >
       </form>

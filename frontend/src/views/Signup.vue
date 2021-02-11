@@ -11,7 +11,7 @@
           class="form-control"
           placeholder="Username (12 caractères maximum)"
           required
-          aria-labelledby="Écrire votre prénom">
+          aria-label="Écrire votre prénom">
           <p class="information">Votre Prénom</p>
         <input
           type="email"
@@ -20,7 +20,7 @@
           class="form-control"
           placeholder="E-mail"
           required
-          aria-labelledby="Écrire votre mail">
+          aria-label="Écrire votre mail">
           <p class="information">Votre adresse email</p>
         <input
           type="password"
@@ -29,7 +29,7 @@
           class="form-control"
           placeholder="Mot de passe"
           required
-          aria-labelledby="Écrire votre mot de passe">
+          aria-label="Écrire votre mot de passe">
           <p class="information">Votre mot de passe</p>
         <input
           type="text"
@@ -37,7 +37,7 @@
           id="defaultSignupFormDescription"
           class="form-control"
           placeholder="Description (optionnel)"
-          aria-labelledby="Écrire votre description (optionnel)">
+          aria-label="Écrire votre description (optionnel)">
           <p class="information">Votre description (optionnel)</p>
         <div class="custom-file"> AVATAR
           <input
@@ -45,7 +45,7 @@
             @change="onFileSelected"
             class="custom-file-input"
             id="formImagePost"
-            aria-labelledby="Choisissez une image (optionel)">  
+            aria-label="Choisissez une image (optionel)">  
           <label class="custom-file-label" for="formImagePost"
             >Avatar</label
           >
@@ -57,7 +57,7 @@
           type="submit"
           @click.prevent="signupSend"
           id="inscriptionButton"
-          aria-labelledby="S'inscrire">
+          aria-label="S'inscrire">
           Inscription
         </button>
       </form>

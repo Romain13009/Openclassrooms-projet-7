@@ -4,16 +4,16 @@
         <div id="navbarNav">
             <ul class="navbar-nav ">
                 <li class="nav-item active" v-if="user.token!==null">
-                    <router-link class="nav-link routerBlack" to="/wall"><i class="fas fa-bell fa-lg"></i></router-link>
+                    <router-link class="nav-link routerBlack" to="/wall" aria-label="Mur des publications"><i class="fas fa-bell fa-lg"></i></router-link>
                 </li>
                  <li class="nav-item active" v-if="user.token!==null">
-                    <router-link class="nav-link routerBlack" to="/profile"><i class="fas fa-user fa-lg"></i></router-link>
+                    <router-link class="nav-link routerBlack" to="/profile" aria-label="Votre profil"><i class="fas fa-user fa-lg"></i></router-link>
                 </li>
                 <li class="nav-item" v-if="user.token!==null">
-                    <router-link class="nav-link routerRed" to="/" @click.prevent="disconnect"><i class="fas fa-power-off fa-lg"></i></router-link>
+                    <router-link class="nav-link routerRed" to="/" @click.prevent="disconnect" aria-label="Se déconnecter"><i class="fas fa-power-off fa-lg"></i></router-link>
                 </li>
                 <li class="nav-item" v-if="user.token==null">
-                    <router-link class="nav-link routerRed" to="/">Veuillez vous connecter</router-link>
+                    <router-link class="nav-link routerRed" to="/" aria-label="Vous n'êtes pas conneceter, cliquez ici pour vous connecter">Veuillez vous connecter</router-link>
                 </li>
             </ul>
         </div>

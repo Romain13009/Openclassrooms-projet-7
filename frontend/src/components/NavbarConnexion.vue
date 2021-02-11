@@ -5,10 +5,10 @@
             <div id="navbarContentRight">
                 <ul id="navbarList">
                     <li class="nav-item active">
-                        <router-link class="nav-link routerBlack" to="/" aria-labelledby="Connexion">S'identifier</router-link>
+                        <router-link class="nav-link routerBlack" to="/" aria-label="Connexion">S'identifier</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link routerRed" to="/signup" aria-labelledby="Inscription">S'inscrire</router-link>
+                        <router-link class="nav-link routerRed" to="/signup" aria-label="Inscription">S'inscrire</router-link>
                     </li>
                 </ul>
             </div>
